@@ -53,18 +53,16 @@
       </ul>
 
 
-      <h2>Style blending examples</h2>
-      Work in progress&hellip;
-      <!--<p>
+      <h2>Style interpolation examples</h2>
+      <p>
         The following are selected examples of interpolation between styles from the synthetic test set.
         In each example, we linearly interpolate between the embeddings of two style inputs while the
         content input is fixed.
         Use the slider to adjust the interpolation coefficient <i>&alpha;</i> and watch the output change.
-        We recommend listening through headphones and using a recent version of Google Chrome.
       </p>
       <p>
         In the first three examples, we performed the interpolation twice&nbsp;&ndash; on a pair of bass embeddings and a pair of piano embeddings, respectively&nbsp;&ndash; and combined the outputs.
-        The last two examples are bass-only.
+        The last example is bass-only.
       </p>
 
       <div class="example" id="exampleTemplate">
@@ -78,7 +76,7 @@
       </div>
 
       <div id="blendingExamples">
-      </div>-->
+      </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -100,14 +98,9 @@
 
       const DATA = [
         {
-          styleA: "“Eagles” Contemporary Country",
-          styleB: "Salsa Guajira",
-          path: "Bass_Piano/03_c_eagle2_a_Guajir2_b/00"
-        },
-        {
           styleA: "Country Arpeggios",
           styleB: "“Hank Sr.” Classic Country Ballad",
-          path: "Bass_Piano/09_ARPEGGIO_b_C~HNKSR1_b/07",
+          path: "Piano_Bass/09_ARPEGGIO_b_C~HNKSR1_b/00",
           vizConfig: {
             maxPitch: 80
           }
@@ -115,21 +108,18 @@
         {
           styleA: "80s Rock Blues",
           styleB: "12/8 Blues",
-          path: "Bass_Piano/16_Clashin1_b_BEEBSLO_b/00",
+          path: "Piano_Bass/16_Clashin1_b_BEEBSLO_b/00",
           comment: "In the 80s Rock Blues style, the “Piano” track actually contains an electric guitar, but we play it using a piano sound here."
         },
         {
-          styleA: "“Santa Monica” Pop Jazz",
-          styleB: "12/8 Blues",
-          path: "Bass/10_SantaMon_a_BEEBSLO_a/10",
-          vizConfig: {
-            maxPitch: 50
-          }
+          styleA: "“Eagles” Contemporary Country",
+          styleB: "Salsa Guajira",
+          path: "Piano_Bass/03_c_eagle2_a_Guajir2_b/00"
         },
         {
-          styleA: "R&B Country Crossover",
-          styleB: "Contemporary Country R&B",
-          path: "Bass/18_CR_ERIC_a_c_rnb_b/00",
+          styleA: "Bossa Lite",
+          styleB: "“Creednce” 70s Funk Country Rock",
+          path: "Bass/11_BosaLite_a_CREEDNCE_a/10",
           vizConfig: {
             maxPitch: 50
           }
@@ -171,7 +161,7 @@
             }
             return a;
           })().map(function(alpha) {
-            var url = "midi/v01/test_blend/" + item.path + "/" + alpha.toFixed(2) + ".mid";
+            var url = "data/blending/" + item.path + "/" + alpha.toFixed(2) + ".mid";
             return core.urlToNoteSequence(url)
           })
         ).then(function(result) {
