@@ -270,6 +270,7 @@
         $('#styleFilename').val(json.data['style'].sequence.filename);
         $('.section[data-sequence-id="content"] h2').text('Content input: ' + button.dataset.contentName);
         $('.section[data-sequence-id="style"] h2').text('Style input: ' + button.dataset.styleName);
+        $('.section[data-sequence-id="content"]')[0].scrollIntoView({behavior: 'smooth'});
       }).finally(() => $('#loadingModal').modal('hide'));
     });
     </script>
