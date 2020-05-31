@@ -5,7 +5,7 @@ const config = {
   devtool: 'eval-source-map',
   entry: __dirname + '/src/js/main.js',
   output:{
-    path: __dirname + '/dist/static',
+    path: __dirname + '/dist',
     filename: 'bundle.js',
     library: 'main',
     libraryTarget: 'window',
@@ -65,7 +65,7 @@ const config = {
             options: {
               name: '[name].[ext]',
               outputPath: 'fonts/',
-              publicPath: 'static/fonts/'
+              publicPath: 'fonts/'
             }
           }
         ]
