@@ -52,6 +52,7 @@ $('input.midi-input').on('change', function() {
     seq.filename = file.name;
 
     initSequence(section, seq);
+    initTrimControls(section);
 
     showMore(seqId + '-loaded');
   }).finally(() => setControlsEnabled(section, true));
@@ -172,12 +173,6 @@ function initSequence(section, seq, visualizerConfig, staticMode) {
 
   if (!staticMode) {
     data[seqId].fullSequence = seq;
-
-    const maxTime = Math.ceil(seq.totalTime / 60 * seq.tempos[0].qpm);
-    section.find('.start-time').val(0);
-    section.find('.start-time').prop('max', maxTime - 1);
-    section.find('.end-time').val(maxTime);
-    section.find('.end-time').prop('max', maxTime);
   }
 
   if (seq.tempos && seq.tempos.length > 0 && seq.tempos[0].qpm > 0) {
@@ -214,6 +209,16 @@ function initSequence(section, seq, visualizerConfig, staticMode) {
   if (seqId == 'content' || seqId == 'output') {
     initRemix(staticMode);
   }
+}
+
+function initTrimControls(section) {
+  const seqId = section.data('sequence-id');
+  const seq = data[seqId].fullSequence;
+  const maxTime = Math.ceil(seq.totalTime / 60 * seq.tempos[0].qpm);
+  section.find('.start-time').val(0);
+  section.find('.start-time').prop('max', maxTime - 1);
+  section.find('.end-time').val(maxTime);
+  section.find('.end-time').prop('max', maxTime);
 }
 
 function addInstrumentCheckboxes(parent, seq, seqId, instrumentOffset) {
@@ -449,6 +454,11 @@ export function loadPreset(preset, staticMode) {
       }
     });
   });
+
+  // Re-initialize controls if not in static mode
+  if (!staticMode) {
+    seqIds.forEach((seqId) => { initTrimControls($(data[seqId].section)); });
+  }
 
   // Load the edited (filtered & remixed) sequences
   seqIds.forEach((seqId) => {
