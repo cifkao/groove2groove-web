@@ -55,7 +55,7 @@ $('input.midi-input').on('change', function() {
     initTrimControls(section);
 
     showMore(seqId + '-loaded');
-  }).finally(() => setControlsEnabled(section, true));
+  }).catch(handleError).finally(() => setControlsEnabled(section, true));
 });
 
 $('.start-time, .end-time').on('change', handleSequenceEdit);
@@ -110,7 +110,7 @@ $('.play-button').on('click', function() {
 
         // Start playback
         data[seqId].player.start(data[seqId].sequence);
-      }).finally(() => $('#loadingModal').modal('hide'));
+      }).catch(handleError).finally(() => $('#loadingModal').modal('hide'));
   }
 });
 
@@ -145,6 +145,7 @@ $('.generate-button').on('click', function() {
   setControlsEnabled(section, false);
 
   fetch(config.apiUrl + '/api/v1/style_transfer/' + $('#modelName').val() + '/', {method: 'POST', body: formData})
+    .then(ensureResponseOk, () => Promise.reject('Connection error'))
     .then((response) => response.arrayBuffer())
     .then(function (buffer) {
       stopAllPlayers();
@@ -159,6 +160,7 @@ $('.generate-button').on('click', function() {
       initSequence(section, seq);
       showMore('output-loaded');
     })
+    .catch(handleError)
     .finally(() => setControlsEnabled(section, true));
 });
 
@@ -298,6 +300,7 @@ function initRemix(staticMode) {
     // Get the response
     setControlsEnabled(section, false);
     fetch(config.apiUrl + '/api/v1/remix/', {method: 'POST', body: formData})
+      .then(ensureResponseOk, () => Promise.reject('Network error'))
       .then((response) => response.arrayBuffer())
       .then(function (buffer) {
         // Decode the protobuffer
@@ -308,6 +311,7 @@ function initRemix(staticMode) {
 
         data['remix'].fullSequence = data['remix'].trimmedSequence = seq;
       })
+      .catch(handleError)
       .finally(() => setControlsEnabled(section, true));
   }
 }
@@ -473,16 +477,43 @@ export function loadPresetFromUrl(url, contentName, styleName, staticMode) {
   $('#loadingModal .loading-text').text('Loading…');
   $('#loadingModal').modal('show');
 
-  fetch(url).then((response) => response.json()).then((json) => {
-    loadPreset(json, staticMode);
-    $('#contentFilename').val(json.data['content'].sequence.filename);
-    $('#styleFilename').val(json.data['style'].sequence.filename);
-    if (contentName) {
-      $('.section[data-sequence-id="content"] h2').text('Content input: ' + contentName);
+  fetch(url)
+    .then(ensureResponseOk, () => Promise.reject('Connection error'))
+    .then((response) => response.json()).then((json) => {
+      loadPreset(json, staticMode);
+      $('#contentFilename').val(json.data['content'].sequence.filename);
+      $('#styleFilename').val(json.data['style'].sequence.filename);
+      if (contentName) {
+        $('.section[data-sequence-id="content"] h2').text('Content input: ' + contentName);
+      }
+      if (styleName) {
+        $('.section[data-sequence-id="style"] h2').text('Style input: ' + styleName);
+      }
+      $('.section[data-sequence-id="content"]')[0].scrollIntoView({behavior: 'smooth'});
+    }).catch(handleError).finally(() => $('#loadingModal').modal('hide'));
+}
+
+function ensureResponseOk(response) {
+  if (!response.ok) {
+    if (response.headers.get('Content-Type') == 'text/plain') {
+      return response.text().then((text) => { Promise.reject(text); });
+    } else {
+      return Promise.reject(response.statusText);
     }
-    if (styleName) {
-      $('.section[data-sequence-id="style"] h2').text('Style input: ' + styleName);
+  }
+  return response;
+}
+
+function handleError(error) {
+  console.log(error);
+  var text;
+  if (error) {
+    if (typeof error.text === 'function') {
+      text = error.text();
+    } else {
+      text = error.toString();
     }
-    $('.section[data-sequence-id="content"]')[0].scrollIntoView({behavior: 'smooth'});
-  }).finally(() => $('#loadingModal').modal('hide'));
+  }
+  $('#errorModal .error-text').text(text);
+  $('#errorModal').modal('show');
 }
