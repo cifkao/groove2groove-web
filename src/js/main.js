@@ -53,12 +53,6 @@ $('input.midi-input').on('change', function() {
 
     initSequence(section, seq);
 
-    const maxTime = Math.ceil(seq.totalTime / 60 * seq.tempos[0].qpm);
-    section.find('.start-time').val(0);
-    section.find('.start-time').prop('max', maxTime - 1);
-    section.find('.end-time').val(maxTime);
-    section.find('.end-time').prop('max', maxTime);
-
     showMore(seqId + '-loaded');
   }).finally(() => setControlsEnabled(section, true));
 });
@@ -173,11 +167,18 @@ $('#savePreset').on('click', function() {
 
 function initSequence(section, seq, visualizerConfig, staticMode) {
   const seqId = section.data('sequence-id');
-  if (!staticMode) {
-    data[seqId].fullSequence = seq;
-  }
   data[seqId].trimmedSequence = seq;
   data[seqId].sequence = seq;
+
+  if (!staticMode) {
+    data[seqId].fullSequence = seq;
+
+    const maxTime = Math.ceil(seq.totalTime / 60 * seq.tempos[0].qpm);
+    section.find('.start-time').val(0);
+    section.find('.start-time').prop('max', maxTime - 1);
+    section.find('.end-time').val(maxTime);
+    section.find('.end-time').prop('max', maxTime);
+  }
 
   if (seq.tempos && seq.tempos.length > 0 && seq.tempos[0].qpm > 0) {
     data[seqId].tempo = Math.round((seq.tempos[0].qpm + Number.EPSILON) * 10) / 10;
