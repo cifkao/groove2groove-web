@@ -34,6 +34,10 @@ $('form').submit(function(e){ e.preventDefault(); });
 $('.after-content-loaded, .after-style-loaded, .after-output-loaded').hide();
 $('.container').fadeIn('fast');
 
+$('#presetsButton').click(function() {
+  $('#presetModal').modal('show');
+});
+
 $('input.midi-input').on('change', function() {
   const file = this.files[0];
   if (!file) return;
@@ -336,16 +340,21 @@ export function stopAllPlayers() {
   }
 }
 
-function showMore(label) {
+function showMore(label, scroll) {
+  if (scroll === undefined) {
+    scroll = true;
+  }
   const elements = $('.after-' + label);
   if (!elements.is(":visible")) {
     elements.fadeIn(
       'fast',
       () => {
         elements.find('.seek-slider').prop('disabled', true);  // Workaround for Bootstrap range
-        elements.filter('.visualizer-card').first().each((_, e) => {
-          e.scrollIntoView({behavior: 'smooth'});
-        });
+        if (scroll) {
+          elements.filter('.visualizer-card').first().each((_, e) => {
+            e.scrollIntoView({behavior: 'smooth'});
+          });
+        }
       });
   }
 }
@@ -401,7 +410,11 @@ export function exportPreset() {
   });
 }
 
-export function loadPreset(preset) {
+export function loadPreset(preset, staticMode) {
+  if (staticMode === undefined) {
+    staticMode = false;
+  }
+
   // Make sure things are loaded in the correct order
   const seqIds = ['content', 'style', 'output', 'remix'];
 
@@ -419,7 +432,7 @@ export function loadPreset(preset) {
     if (seqId == 'remix') {
       initRemix(true);
     } else {
-      initSequence($(data[seqId].section), presetData.trimmedSequence, undefined, true);
+      initSequence($(data[seqId].section), presetData.trimmedSequence, undefined, staticMode);
     }
     Object.assign(data[seqId], presetData);
   });
@@ -439,6 +452,26 @@ export function loadPreset(preset) {
   // Load the edited (filtered & remixed) sequences
   seqIds.forEach((seqId) => {
     updateSequence(seqId, data[seqId].sequence);
-    showMore(seqId + '-loaded');
+    showMore(seqId + '-loaded', false);
   });
+}
+
+export function loadPresetFromUrl(url, contentName, styleName, staticMode) {
+  stopAllPlayers();
+
+  $('#loadingModal .loading-text').text('Loading…');
+  $('#loadingModal').modal('show');
+
+  fetch(url).then((response) => response.json()).then((json) => {
+    loadPreset(json, staticMode);
+    $('#contentFilename').val(json.data['content'].sequence.filename);
+    $('#styleFilename').val(json.data['style'].sequence.filename);
+    if (contentName) {
+      $('.section[data-sequence-id="content"] h2').text('Content input: ' + contentName);
+    }
+    if (styleName) {
+      $('.section[data-sequence-id="style"] h2').text('Style input: ' + styleName);
+    }
+    $('.section[data-sequence-id="content"]')[0].scrollIntoView({behavior: 'smooth'});
+  }).finally(() => $('#loadingModal').modal('hide'));
 }
