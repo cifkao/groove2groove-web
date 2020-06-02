@@ -11,7 +11,7 @@ const config = {
     libraryTarget: 'window',
   },
   resolve: {
-    extensions: ['.js', '.css']
+    extensions: ['.ts', '.js', '.css']
   },
   plugins: [
     new webpack.ProvidePlugin({
@@ -22,20 +22,9 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.m?js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              ['@babel/preset-env', {
-                useBuiltIns: 'usage',
-                corejs: 3
-              }]
-            ],
-            plugins: ['@babel/plugin-proposal-object-rest-spread']
-          }
-        }
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
       },
       {
         test: /\.(scss)$/,
@@ -69,6 +58,13 @@ const config = {
             }
           }
         ]
+      },
+      {
+        test: require.resolve('jquery'),
+        use: [{
+            loader: 'expose-loader',
+            options: '$'
+        }]
       }
     ]
   }

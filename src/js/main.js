@@ -6,8 +6,6 @@ import * as mm from '@magenta/music/es6/core';
 import {NoteSequence} from '@magenta/music/es6/protobuf';
 
 
-window.$ = window.jQuery = jQuery;
-
 const config = {apiUrl: '.'};
 export function init(cfg) {
   Object.assign(config, cfg);
