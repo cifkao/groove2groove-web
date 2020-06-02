@@ -23,7 +23,7 @@ const INSTRUMENT_NAMES = [
 const DRUMS = 'DRUMS';
 
 const ERROR_MESSAGES = {
-  'STYLE_INPUT_TOO_LONG': 'The given style input is too long. Please choose an 8-bar section.'
+  'STYLE_INPUT_TOO_LONG': 'The given style input is too long. Please use the ‘Start bar’ and ‘End bar’ fields to select an 8-bar (32-beat) section.'
 };
 
 const data = {content: {}, style: {}, output: {}, remix: {}};
