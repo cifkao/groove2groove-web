@@ -22,6 +22,10 @@ const INSTRUMENT_NAMES = [
 ];
 const DRUMS = 'DRUMS';
 
+const ERROR_MESSAGES = {
+  'STYLE_INPUT_TOO_LONG': 'The given style input is too long. Please choose an 8-bar section.'
+};
+
 const data = {content: {}, style: {}, output: {}, remix: {}};
 var controlCount = 0;  // counter used for assigning IDs to dynamically created controls
 
@@ -499,8 +503,9 @@ export function loadPresetFromUrl(url, contentName, styleName, staticMode) {
 
 function ensureResponseOk(response) {
   if (!response.ok) {
-    if (response.headers.get('Content-Type') == 'text/plain') {
-      return response.text().then((text) => { Promise.reject(text); });
+    const contentType = response.headers.get('Content-Type');
+    if (contentType && contentType.startsWith('text/plain')) {
+      return response.text().then((text) => Promise.reject(text));
     } else {
       return Promise.reject(response.statusText);
     }
@@ -517,6 +522,9 @@ function handleError(error) {
     } else {
       text = error.toString();
     }
+  }
+  if (ERROR_MESSAGES[text]) {
+    text = ERROR_MESSAGES[text];
   }
   $('#errorModal .error-text').text(text);
   $('#errorModal').modal('show');

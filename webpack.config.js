@@ -18,6 +18,7 @@ const config = {
       $: "jquery",
       jQuery: "jquery"
     }),
+    //new webpack.IgnorePlugin(/@tensorflow/),
   ],
   module: {
     rules: [
