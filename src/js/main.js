@@ -300,7 +300,7 @@ function initRemix(staticMode) {
     // Get the response
     setControlsEnabled(section, false);
     fetch(config.apiUrl + '/api/v1/remix/', {method: 'POST', body: formData})
-      .then(ensureResponseOk, () => Promise.reject('Network error'))
+      .then(ensureResponseOk, () => Promise.reject('Connection error'))
       .then((response) => response.arrayBuffer())
       .then(function (buffer) {
         // Decode the protobuffer
