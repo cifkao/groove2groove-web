@@ -467,6 +467,10 @@ export function loadPreset(preset, staticMode) {
   // Load the edited (filtered & remixed) sequences
   seqIds.forEach((seqId) => {
     updateSequence(seqId, data[seqId].sequence);
+
+    // Also set filenames
+    $(data[seqId].section).find('.custom-file label').text(data[seqId].sequence.filename);
+
     showMore(seqId + '-loaded', false);
   });
 }
