@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-    <div class="container mt-3" style="display: none;">
+    <div class="container mt-3 pb-2" style="display: none;">
       <h1>Groove2Groove demo</h1>
       <p>Either pick a preset, or upload your own content &amp; style input below. Bear in mind that some files work better than others due to possible mistakes in metadata or other inconsistencies common in MIDI files found in the wild.</p>
       <div class="row mt-1 mb-3">
@@ -235,6 +235,12 @@
         <button id="savePreset" name="savePreset" class="btn btn-success btn-block"><span class="oi oi-data-transfer-download" title="Save" aria-hidden="true"></span> Save preset</button>
       </div>
     </div>
+
+    <footer class="footer">
+      <div class="container" style="display: none;">
+        Created with <a href="https://github.com/magenta/magenta-js/" target="_blank">magenta.js</a>.
+      </div>
+    </footer>
 
     <div class="modal" id="presetModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
       <div class="modal-dialog modal-xl modal-dialog-centered" role="document">

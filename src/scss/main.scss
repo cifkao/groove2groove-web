@@ -3,6 +3,29 @@ $icon-font-path: "~open-iconic/font/fonts/";
 @import "~open-iconic/font/css/open-iconic-bootstrap";
 
 
+/* Sticky footer */
+$footer-height: 60px;
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: $footer-height;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: $footer-height;
+  line-height: $footer-height;
+  background-color: #f5f5f5;
+}
+/* End sticky footer */
+
+
 $instrument-colors: $blue, $indigo, $pink, $red, $orange, $yellow, $green, $teal, $cyan;
 
 
