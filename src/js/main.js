@@ -4,6 +4,7 @@ import 'bootstrap/js/dist/modal';
 import {saveAs} from 'file-saver';
 import * as mm from '@magenta/music/es6/core';
 import {NoteSequence} from '@magenta/music/es6/protobuf';
+import * as ns_util from './ns_util';
 
 
 const config = {apiUrl: '.'};
@@ -18,7 +19,7 @@ const VISUALIZER_CONFIG = {
 const INSTRUMENT_NAMES = [
   "Acoustic Grand Piano", "Bright Acoustic Piano", "Electric Grand Piano", "Honky-tonk Piano", "Electric Piano 1", "Electric Piano 2", "Harpsichord", "Clavinet", "Celesta", "Glockenspiel", "Music Box", "Vibraphone", "Marimba", "Xylophone", "Tubular Bells", "Dulcimer", "Drawbar Organ", "Percussive Organ", "Rock Organ", "Church Organ", "Reed Organ", "Accordion", "Harmonica", "Tango Accordion", "Acoustic Guitar (nylon)", "Acoustic Guitar (steel)", "Electric Guitar (jazz)", "Electric Guitar (clean)", "Electric Guitar (muted)", "Overdriven Guitar", "Distortion Guitar", "Guitar Harmonics", "Acoustic Bass", "Electric Bass (finger)", "Electric Bass (pick)", "Fretless Bass", "Slap Bass 1", "Slap Bass 2", "Synth Bass 1", "Synth Bass 2", "Violin", "Viola", "Cello", "Contrabass", "Tremolo Strings", "Pizzicato Strings", "Orchestral Harp", "Timpani", "String Ensemble 1", "String Ensemble 2", "Synth Strings 1", "Synth Strings 2", "Choir Aahs", "Voice Oohs", "Synth Choir", "Orchestra Hit", "Trumpet", "Trombone", "Tuba", "Muted Trumpet", "French Horn", "Brass Section", "Synth Brass 1", "Synth Brass 2", "Soprano Sax", "Alto Sax", "Tenor Sax", "Baritone Sax", "Oboe", "English Horn", "Bassoon", "Clarinet", "Piccolo", "Flute", "Recorder", "Pan Flute", "Blown bottle", "Shakuhachi", "Whistle", "Ocarina", "Lead 1 (square)", "Lead 2 (sawtooth)", "Lead 3 (calliope)", "Lead 4 chiff", "Lead 5 (charang)", "Lead 6 (voice)", "Lead 7 (fifths)", "Lead 8 (bass + lead)", "Pad 1 (new age)", "Pad 2 (warm)", "Pad 3 (polysynth)", "Pad 4 (choir)", "Pad 5 (bowed)", "Pad 6 (metallic)", "Pad 7 (halo)", "Pad 8 (sweep)", "FX 1 (rain)", "FX 2 (soundtrack)", "FX 3 (crystal)", "FX 4 (atmosphere)", "FX 5 (brightness)", "FX 6 (goblins)", "FX 7 (echoes)", "FX 8 (sci-fi)", "Sitar", "Banjo", "Shamisen", "Koto", "Kalimba", "Bagpipe", "Fiddle", "Shanai", "Tinkle Bell", "Agogo", "Steel Drums", "Woodblock", "Taiko Drum", "Melodic Tom", "Synth Drum", "Reverse Cymbal", "Guitar Fret Noise", "Breath Noise", "Seashore", "Bird Tweet", "Telephone Ring", "Helicopter", "Applause", "Gunshot"
 ];
-const DRUMS = 'DRUMS';
+const DRUMS = ns_util.DRUMS;
 
 const ERROR_MESSAGES = {
   'STYLE_INPUT_TOO_LONG': 'The given style input is too long. Please use the ‘Start bar’ and ‘End bar’ fields to select an 8-bar (32-beat) section.'
@@ -229,8 +230,8 @@ function addInstrumentCheckboxes(parent, seq, seqId, instrumentOffset) {
   instrumentOffset = instrumentOffset || 0;
 
   parent.empty();
-  Object.entries(getInstrumentPrograms(seq)).forEach(function ([instrument, program]) {
-    instrument = parseInt(instrument) + instrumentOffset;
+  for (let [instrument, program] of ns_util.getInstrumentPrograms(seq)) {
+    instrument = instrument + instrumentOffset;
     const controlId = 'checkbox' + (controlCount++);
     const label = program == DRUMS ? 'Drums' : INSTRUMENT_NAMES[program];
     const checkbox = $('<input type="checkbox" class="form-check-input" checked>')
@@ -245,7 +246,7 @@ function addInstrumentCheckboxes(parent, seq, seqId, instrumentOffset) {
         .attr('data-instrument', instrument)
         .text(label))
       .appendTo(parent);
-  });
+  }
   return parent.find('input');
 }
 
@@ -271,7 +272,7 @@ function handleSequenceEdit() {
 
   const instruments = getSelectedInstruments(section.find('.instrument-toggles :checked'));
   data[seqId].selectedInstruments = instruments;
-  seq = filterSequence(seq, instruments);
+  seq = ns_util.filterSequence(seq, instruments);
 
   updateSequence(seqId, seq);
 
@@ -371,35 +372,10 @@ function showMore(label, scroll) {
   }
 }
 
-function getInstrumentPrograms(sequence) {
-  const programs = {};
-  sequence.notes.forEach(function(note) {
-    const program = note.isDrum ? DRUMS : note.program;
-    programs[note.instrument] = program;
-  });
-  return programs;
-}
-
 function getSelectedInstruments(checkboxes) {
   return checkboxes.map((_, checkbox) => $(checkbox).val())
     .map((_, p) => isNaN(p) ? p : parseInt(p))
     .get();
-}
-
-function filterSequence(sequence, instruments, inPlace) {
-  const instrumentMap = {};
-  instruments.forEach((i) => {instrumentMap[i] = true;});
-
-  // Make a copy if needed
-  const filtered = inPlace ? sequence : mm.sequences.clone(sequence);
-  const notes = sequence.notes;
-  filtered.notes = [];
-  notes.forEach(function(note) {
-    if ((note.isDrum && instrumentMap[DRUMS]) || instrumentMap[note.instrument])
-      filtered.notes.push(note);
-  });
-
-  return filtered;
 }
 
 export function exportPreset() {
