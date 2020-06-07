@@ -178,6 +178,10 @@ function initSequence(section, seq, visualizerConfig, staticMode) {
 
   if (!staticMode) {
     data[seqId].fullSequence = seq;
+
+    if (seqId === 'content' || seqId === 'style') {
+      data[seqId].beats = ns_util.getBeats(seq, true);
+    }
   }
 
   if (seq.tempos && seq.tempos.length > 0 && seq.tempos[0].qpm > 0) {
@@ -218,8 +222,10 @@ function initSequence(section, seq, visualizerConfig, staticMode) {
 
 function initTrimControls(section) {
   const seqId = section.data('sequence-id');
+  if (section.find('.start-time, .end-time').length === 0)
+    return;
   const seq = data[seqId].fullSequence;
-  const maxTime = Math.ceil(seq.totalTime / 60 * seq.tempos[0].qpm);
+  const maxTime = data[seqId].beats.length - 1;
   section.find('.start-time').val(0);
   section.find('.start-time').prop('max', maxTime - 1);
   section.find('.end-time').val(maxTime);
@@ -256,13 +262,16 @@ function handleSequenceEdit() {
 
   var seq = data[seqId].fullSequence;
   if (seq) {
-    const startTime = section.find('.start-time').val();
-    const endTime = section.find('.end-time').val();
-    if (startTime !== undefined && endTime !== undefined) {
-      seq = mm.sequences.trim(seq,
-                              startTime * 60 / seq.tempos[0].qpm,
-                              endTime * 60 / seq.tempos[0].qpm,
-                              true);
+    const startBeat = parseInt(section.find('.start-time').val());
+    const endBeat = parseInt(section.find('.end-time').val());
+    // startBeat and endBeat will be NaN if the section has no trim controls.
+    if (Number.isFinite(startBeat) && Number.isFinite(endBeat)) {
+      // Cut a bit before the first beat, so that notes starting on the beat don't get removed.
+      // The sequence will be quantized before running the model, so it's OK that it's a bit shifted.
+      const beats = data[seqId].beats;
+      const startTime = Math.max(0, beats[startBeat] - 1e-5);
+      const endTime = beats[endBeat];
+      seq = mm.sequences.trim(seq, startTime, endTime, true);
     }
     data[seqId].trimmedSequence = seq;
   } else {
@@ -488,18 +497,21 @@ function ensureResponseOk(response) {
 }
 
 function handleError(error) {
-  console.log(error);
-  var text;
-  if (error) {
-    if (typeof error.text === 'function') {
-      text = error.text();
-    } else {
-      text = error.toString();
+  try {
+    var text;
+    if (error) {
+      if (typeof error.text === 'function') {
+        text = error.text();
+      } else {
+        text = error.toString();
+      }
     }
+    if (ERROR_MESSAGES[text]) {
+      text = ERROR_MESSAGES[text];
+    }
+    $('#errorModal .error-text').text(text);
+    $('#errorModal').modal('show');
+  } finally {
+    throw error;
   }
-  if (ERROR_MESSAGES[text]) {
-    text = ERROR_MESSAGES[text];
-  }
-  $('#errorModal .error-text').text(text);
-  $('#errorModal').modal('show');
 }

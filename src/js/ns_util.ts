@@ -5,7 +5,7 @@ export const DRUMS = 'DRUMS';
 export type InstrumentSpec = number | 'DRUMS';
 export type ProgramSpec = number | 'DRUMS';
 
-export function getBeats(ns: INoteSequence): number[] {
+export function getBeats(ns: INoteSequence, extraFinalBeat?: boolean): number[] {
   const beats = [0];
 
   const tempos = Array.from(ns.tempos);
@@ -24,6 +24,11 @@ export function getBeats(ns: INoteSequence): number[] {
       beats.push(tempos[i].time + (beats.length - currentBeats) / tempos[i].qpm * 60);
     }
     currentBeats += beatDiff;
+  }
+
+  if (extraFinalBeat) {
+    // Add one more beat after totalTime
+    beats.push(beats[beats.length - 1] + 60 / tempos[tempos.length - 2].qpm);
   }
 
   return beats;
