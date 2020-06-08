@@ -20,7 +20,10 @@ body {
   bottom: 0;
   width: 100%;
   height: $footer-height;
-  line-height: $footer-height;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 95%;
   background-color: #f5f5f5;
 }
 /* End sticky footer */
