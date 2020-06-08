@@ -69,7 +69,7 @@ export function normalizeTempo(ns: INoteSequence, targetTempo?: number) {
     tempos.unshift({time: 0, qpm: 120});
   }
   if (targetTempo === undefined) {
-    targetTempo = (tempos.length > 0 ? tempos[0].qpm : 120);
+    targetTempo = tempos[0].qpm;
   }
 
   // Get all events and sort them in reverse (so that we pop the earlier ones first).
