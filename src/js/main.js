@@ -22,7 +22,10 @@ const INSTRUMENT_NAMES = [
 const DRUMS = ns_util.DRUMS;
 
 const ERROR_MESSAGES = {
-  'STYLE_INPUT_TOO_LONG': 'The given style input is too long. Please use the ‘Start bar’ and ‘End bar’ fields to select an 8-bar (32-beat) section.'
+  'STYLE_INPUT_TOO_LONG': {
+    title: 'Input too long',
+    message: 'The given style input is too long. Please use the ‘Start bar’ and ‘End bar’ fields to select an 8-bar (32-beat) section.'
+  }
 };
 
 const data = {content: {}, style: {}, output: {}, remix: {}};
@@ -498,7 +501,7 @@ function ensureResponseOk(response) {
 
 function handleError(error) {
   try {
-    var text;
+    var text = '';
     if (error) {
       if (typeof error.text === 'function') {
         text = error.text();
@@ -506,10 +509,13 @@ function handleError(error) {
         text = error.toString();
       }
     }
+    var message = text, title = 'Error';
     if (ERROR_MESSAGES[text]) {
-      text = ERROR_MESSAGES[text];
+      message = ERROR_MESSAGES[text].message;
+      title = ERROR_MESSAGES[text].title;
     }
-    $('#errorModal .error-text').text(text);
+    $('#errorModal .modal-title').text('\u26a0 ' + title);
+    $('#errorModal .error-text').text(message);
     $('#errorModal').modal('show');
   } finally {
     throw error;
