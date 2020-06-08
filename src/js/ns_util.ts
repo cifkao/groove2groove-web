@@ -2,10 +2,36 @@ import * as mm from '@magenta/music/es6/core';
 import {INoteSequence, NoteSequence} from '@magenta/music/es6/protobuf';
 
 export const DRUMS = 'DRUMS';
-export type InstrumentSpec = number | 'DRUMS';
 export type ProgramSpec = number | 'DRUMS';
 
-export function getBeats(ns: INoteSequence, extraFinalBeat?: boolean): number[] {
+export function filterByInstrument(ns: INoteSequence, instruments: number[], inPlace = false) {
+  const instrumentSet = new Set<number>();
+  for (const i of instruments) {
+    instrumentSet.add(i || 0);
+  }
+
+  const filtered = inPlace ? ns : mm.sequences.clone(ns);
+  const notes = filtered.notes;
+  filtered.notes = [];
+  for (const note of notes) {
+    if (instrumentSet.has(note.instrument || 0)) {
+      filtered.notes.push(note);
+    }
+  }
+
+  return filtered;
+}
+
+export function getInstrumentPrograms(ns: INoteSequence) {
+  const map = new Map<number, ProgramSpec>();
+  for (const note of ns.notes) {
+    const program = note.isDrum ? DRUMS : note.program || 0;
+    map.set(note.instrument || 0, program);
+  }
+  return map;
+}
+
+export function getBeats(ns: INoteSequence, extraFinalBeat = false): number[] {
   const beats = [0];
 
   const tempos = Array.from(ns.tempos);
@@ -34,29 +60,95 @@ export function getBeats(ns: INoteSequence, extraFinalBeat?: boolean): number[] 
   return beats;
 }
 
-export function filterSequence(ns: INoteSequence, instruments: InstrumentSpec[], inPlace?: boolean) {
-  const instrumentSet = new Set<InstrumentSpec>();
-  for (let i of instruments) {
-    instrumentSet.add(i || 0);
+export function normalizeTempo(ns: INoteSequence, targetTempo?: number) {
+  ns = mm.sequences.clone(ns);
+
+  const tempos = Array.from(ns.tempos);
+  tempos.sort((a, b) => a.time - b.time);
+  if (tempos.length == 0 || tempos[0].time > 0) {
+    tempos.unshift({time: 0, qpm: 120});
+  }
+  if (targetTempo === undefined) {
+    targetTempo = (tempos.length > 0 ? tempos[0].qpm : 120);
   }
 
-  const filtered = inPlace ? ns : mm.sequences.clone(ns);
-  const notes = filtered.notes;
-  filtered.notes = [];
-  for (let note of notes) {
-    if ((note.isDrum && instrumentSet.has(DRUMS)) || instrumentSet.has(note.instrument || 0)) {
-      filtered.notes.push(note);
+  // Get all events and sort them in reverse (so that we pop the earlier ones first).
+  // Ignore tempos because we will eventually remove them.
+  const events = [];
+  for (const eventCollection of [ns.timeSignatures, ns.keySignatures, ns.pitchBends,
+                                 ns.controlChanges, ns.textAnnotations, ns.sectionAnnotations]) {
+    for (const event of eventCollection) {
+      events.push(event);
+    }
+  }
+  events.sort((a, b) => b.time - a.time);
+
+  // Do the same for note-ons and note-offs.
+  const noteOns = Array.from(ns.notes);
+  noteOns.sort((a, b) => b.startTime - a.startTime);
+  const noteOffs = Array.from(ns.notes);
+  noteOffs.sort((a, b) => b.endTime - a.endTime);
+
+  const newTempoTimes = [0];
+
+  function getNewTime(oldTime: number, currentTempoIndex: number) {
+    const tempo = tempos[currentTempoIndex];
+    return newTempoTimes[currentTempoIndex] + (oldTime - tempo.time) * tempo.qpm / targetTempo;
+  }
+
+  function popIf<T>(array: T[], condition: (e: T) => boolean): T {
+    if (array.length > 0 && condition(array[array.length - 1])) {
+      return array.pop();
+    }
+    return null;
+  }
+
+  tempos.push(NoteSequence.Tempo.create({time: ns.totalTime + 1}));  // Dummy final tempo
+
+  // Find the new times of all tempo changes, then adjust the events in between.
+  for (let i = 0; i < tempos.length - 1; i++) {
+    if (i > 0) {
+      newTempoTimes.push(getNewTime(tempos[i].time, i - 1));
+    }
+
+    let event, note;
+    while (event = popIf(events, (e) => e.time <= tempos[i+1].time)) {
+      event.time = getNewTime(event.time, i);
+    }
+    while (note = popIf(noteOns, (n) => n.startTime <= tempos[i+1].time)) {
+      note.startTime = getNewTime(note.startTime, i);
+    }
+    while (note = popIf(noteOffs, (n) => n.endTime <= tempos[i+1].time)) {
+      note.endTime = getNewTime(note.endTime, i);
     }
   }
 
-  return filtered;
+  ns.tempos = [NoteSequence.Tempo.create({time: 0, qpm: targetTempo})];
+  return ns;
 }
 
-export function getInstrumentPrograms(ns: INoteSequence) {
-  const map = new Map<InstrumentSpec, ProgramSpec>();
-  for (let note of ns.notes) {
-    const program = note.isDrum ? DRUMS : note.program || 0;
-    map.set(note.instrument || 0, program);
+export function merge(sequences: INoteSequence[]) {
+  const result = mm.sequences.clone(sequences[0]);
+  for (let ns of sequences.slice(1)) {
+    ns = mm.sequences.clone(ns);
+
+    // Shift instrument IDs to avoid collisions
+    const instrumentOffset = 1 + result.notes.reduce(
+        (a: number, b: NoteSequence.INote) => Math.max(a, b.instrument), -1);
+    for (const collection of [ns.notes, ns.pitchBends, ns.controlChanges]) {
+      for (const item of collection) {
+        item.instrument += instrumentOffset;
+      }
+    }
+
+    const KEYS = ['tempos', 'timeSignatures', 'keySignatures', 'notes', 'pitchBends',
+                  'controlChanges', 'textAnnotations'] as const;
+    for (const key of KEYS) {
+      for (const item of ns[key]) {
+        result[key].push(item);
+      }
+    }
+    result.totalTime = Math.max(result.totalTime, ns.totalTime);
   }
-  return map;
+  return result;
 }

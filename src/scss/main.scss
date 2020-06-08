@@ -26,6 +26,11 @@ body {
 /* End sticky footer */
 
 
+.cursor-progress, .cursor-progress * {
+  cursor: progress;
+}
+
+
 $instrument-colors: $blue, $indigo, $pink, $red, $orange, $yellow, $green, $teal, $cyan;
 
 

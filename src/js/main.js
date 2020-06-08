@@ -103,6 +103,7 @@ $('.play-button').on('click', function() {
     section.find('.seek-slider').prop('max', data[seqId].sequence.totalTime).val(0);
     $('#loadingModal .loading-text').text('Loading sounds…');
     $('#loadingModal').modal('show');
+    showWaiting($('html'), true);
     data[seqId].player.loadSamples(data[seqId].sequence)
       .then(() => {
         // Change button icon and text
@@ -116,7 +117,10 @@ $('.play-button').on('click', function() {
 
         // Start playback
         data[seqId].player.start(data[seqId].sequence);
-      }).catch(handleError).finally(() => $('#loadingModal').modal('hide'));
+      }).catch(handleError).finally(() => {
+        $('#loadingModal').modal('hide');
+        showWaiting($('html'), false);
+      });
   }
 });
 
@@ -149,6 +153,10 @@ $('.generate-button').on('click', function() {
   formData.append('softmax_temperature', $('#samplingTemperature').val());
 
   setControlsEnabled(section, false);
+  showWaiting(section, true);
+  const remixSection = $('.section[data-sequence-id="remix"]');
+  setControlsEnabled(remixSection, false);
+  showWaiting(remixSection, true);
 
   fetch(config.apiUrl + '/api/v1/style_transfer/' + $('#modelName').val() + '/', {method: 'POST', body: formData})
     .then(ensureResponseOk, () => Promise.reject('Connection error'))
@@ -167,7 +175,12 @@ $('.generate-button').on('click', function() {
       showMore('output-loaded');
     })
     .catch(handleError)
-    .finally(() => setControlsEnabled(section, true));
+    .finally(() => {
+      setControlsEnabled(section, true);
+      showWaiting(section, false);
+      setControlsEnabled(remixSection, true);
+      showWaiting(remixSection, false);
+    });
 });
 
 $('#savePreset').on('click', function() {
@@ -260,36 +273,41 @@ function addInstrumentCheckboxes(parent, seq, seqId, instrumentOffset) {
 }
 
 function handleSequenceEdit() {
-  const section = $(this).closest('[data-sequence-id]');
+  const control = $(this);
+  const section = control.closest('[data-sequence-id]');
   const seqId = section.data('sequence-id');
 
-  var seq = data[seqId].fullSequence;
-  if (seq) {
-    const startBeat = parseInt(section.find('.start-time').val());
-    const endBeat = parseInt(section.find('.end-time').val());
-    // startBeat and endBeat will be NaN if the section has no trim controls.
-    if (Number.isFinite(startBeat) && Number.isFinite(endBeat)) {
-      // Cut a bit before the first beat, so that notes starting on the beat don't get removed.
-      // The sequence will be quantized before running the model, so it's OK that it's a bit shifted.
-      const beats = data[seqId].beats;
-      const startTime = Math.max(0, beats[startBeat] - 1e-5);
-      const endTime = beats[endBeat];
-      seq = mm.sequences.trim(seq, startTime, endTime, true);
+  showWaiting($('html'), true);
+  delay().then(() => {
+    var seq = data[seqId].fullSequence;
+    if (seq) {
+      const startBeat = parseInt(section.find('.start-time').val());
+      const endBeat = parseInt(section.find('.end-time').val());
+      // startBeat and endBeat will be NaN if the section has no trim controls.
+      if (Number.isFinite(startBeat) && Number.isFinite(endBeat)) {
+        // Cut a bit before the first beat, so that notes starting on the beat don't get removed.
+        // The sequence will be quantized before running the model, so it's OK that it's a bit shifted.
+        const beats = data[seqId].beats;
+        const startTime = Math.max(0, beats[startBeat] - 1e-5);
+        const endTime = beats[endBeat];
+        seq = mm.sequences.trim(seq, startTime, endTime, true);
+      }
+      data[seqId].trimmedSequence = seq;
+    } else {
+      // There might be no fullSequence if the data was loaded from a preset
+      seq = data[seqId].trimmedSequence;
     }
-    data[seqId].trimmedSequence = seq;
-  } else {
-    // There might be no fullSequence if the data was loaded from a preset
-    seq = data[seqId].trimmedSequence;
-  }
 
-  const instruments = getSelectedInstruments(section.find('.instrument-toggles :checked'));
-  data[seqId].selectedInstruments = instruments;
-  seq = ns_util.filterSequence(seq, instruments);
+    const instruments = getSelectedInstruments(section.find('.instrument-toggles :checked'));
+    data[seqId].selectedInstruments = instruments;
+    seq = ns_util.filterByInstrument(seq, instruments);
 
-  updateSequence(seqId, seq);
+    updateSequence(seqId, seq);
 
-  if ($(this).hasClass('start-time'))
-    section.find('.visualizer-container').scrollLeft(0);
+    if (control.hasClass('start-time')) {
+      section.find('.visualizer-container').scrollLeft(0);
+    }
+  }).finally(() => showWaiting($('html'), false));
 }
 
 function initRemix(staticMode) {
@@ -305,29 +323,12 @@ function initRemix(staticMode) {
                staticMode);
 
   if (!staticMode) {
-    // Create request
-    const contentSeq = data['content'].trimmedSequence;
     const outputSeq = data['output'].trimmedSequence;
-    const formData = new FormData();
-    formData.append('content_sequence', new Blob([NoteSequence.encode(contentSeq).finish()]), 'content_sequence');
-    formData.append('output_sequence', new Blob([NoteSequence.encode(outputSeq).finish()]), 'output_sequence');
-
-    // Get the response
-    setControlsEnabled(section, false);
-    fetch(config.apiUrl + '/api/v1/remix/', {method: 'POST', body: formData})
-      .then(ensureResponseOk, () => Promise.reject('Connection error'))
-      .then((response) => response.arrayBuffer())
-      .then(function (buffer) {
-        // Decode the protobuffer
-        const seq = NoteSequence.decode(new Uint8Array(buffer));
-
-        // Assign a new filename based on the input filenames
-        seq.filename = outputSeq.filename.replace(/\.[^.]+$/, '') + '__remix.mid';
-
-        data['remix'].fullSequence = data['remix'].trimmedSequence = seq;
-      })
-      .catch(handleError)
-      .finally(() => setControlsEnabled(section, true));
+    const contentSeq = ns_util.normalizeTempo(data['content'].trimmedSequence,
+                                              outputSeq.tempos[0].qpm);
+    const seq = ns_util.merge([outputSeq, contentSeq]);
+    seq.filename = outputSeq.filename.replace(/\.[^.]+$/, '') + '__remix.mid';
+    data['remix'].fullSequence = data['remix'].trimmedSequence = seq;
   }
 }
 
@@ -470,6 +471,7 @@ export function loadPresetFromUrl(url, contentName, styleName, staticMode) {
 
   $('#loadingModal .loading-text').text('Loading…');
   $('#loadingModal').modal('show');
+  $('html').addClass('cursor-progress');
 
   fetch(url)
     .then(ensureResponseOk, () => Promise.reject('Connection error'))
@@ -484,7 +486,10 @@ export function loadPresetFromUrl(url, contentName, styleName, staticMode) {
         $('.section[data-sequence-id="style"] h2').text('Style input: ' + styleName);
       }
       $('.section[data-sequence-id="content"]')[0].scrollIntoView({behavior: 'smooth'});
-    }).catch(handleError).finally(() => $('#loadingModal').modal('hide'));
+    }).catch(handleError).finally(() => {
+      $('#loadingModal').modal('hide');
+      $('html').removeClass('cursor-progress');
+    });
 }
 
 function ensureResponseOk(response) {
@@ -520,4 +525,20 @@ function handleError(error) {
   } finally {
     throw error;
   }
+}
+
+function showWaiting(element, waiting) {
+  if (waiting) {
+    element.data('in-progress', (element.data('in-progress') || 0) + 1);
+    element.addClass('cursor-progress');
+  } else {
+    element.data('in-progress', (element.data('in-progress') || 1) - 1);
+    if (!element.data('in-progress')) {
+      element.removeClass('cursor-progress');
+    }
+  }
+}
+
+function delay(time) {
+  return new Promise(resolve => setTimeout(() => resolve(), time || 0));
 }
