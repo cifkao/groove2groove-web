@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "declaration": true,
+    "allowJs": true,
+    "sourceMap": true,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "pretty": true,
+    "allowUnreachableCode": false,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "target": "es5",
+    "module": "es6",
+    "moduleResolution": "node"
+  },
+  "include": [ "src" ],
+  "exclude": [
+    "node_modules"
+  ]
+}
