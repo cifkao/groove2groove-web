@@ -34,15 +34,20 @@ export function getInstrumentPrograms(ns: INoteSequence) {
 export function getBeats(ns: INoteSequence, extraFinalBeat = false): number[] {
   const beats = [0];
 
-  const tempos = Array.from(ns.tempos);
+  type MyTempo = NoteSequence.ITempo & {dummy?: boolean};
+  const tempos = Array.from<MyTempo>(ns.tempos);
+  tempos.push({time: ns.totalTime, dummy: true});  // Dummy final tempo
   tempos.sort((a, b) => a.time - b.time);
-  if (tempos.length == 0 || tempos[0].time > 0) {
+  if (tempos[0].time > 0) {
     tempos.unshift(NoteSequence.Tempo.create({time: 0, qpm: 120}));
   }
-  tempos.push(NoteSequence.Tempo.create({time: ns.totalTime}));  // Dummy final tempo
 
   var currentBeats = 0; // The time in (fractional) beats of the next tempo change
   for (let i = 0; i < tempos.length - 1; i++) {
+    if (tempos[i].dummy) {  // May happen if some of the tempos occur after totalTime
+      break;
+    }
+
     const timeDiff = tempos[i + 1].time - tempos[i].time;
     const beatDiff = timeDiff * tempos[i].qpm / 60;
     // Emit all the beats between the two tempo changes.
