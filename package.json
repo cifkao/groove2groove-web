@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack -p --progress --config webpack.config.js",
-    "dev-build": "webpack --progress -d --config webpack.config.js",
-    "watch": "webpack --progress -d --config webpack.config.js --watch",
-    "serve": "http-server dist/"
+    "build": "webpack -p --progress --config webpack.prod.js",
+    "dev-build": "webpack --progress -d --config webpack.dev.js",
+    "serve": "http-server dist/",
+    "dev-serve": "webpack-dev-server --host `hostname --fqdn` --config webpack.dev.js"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
@@ -31,7 +31,9 @@
     "ts-loader": "^7.0.5",
     "typescript": "^3.9.5",
     "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-merge": "^4.2.2"
   },
   "dependencies": {
     "@magenta/music": "^1.14.0",
