@@ -3,36 +3,56 @@ import '../scss/main.scss';
 import 'bootstrap/js/dist/modal';
 import {saveAs} from 'file-saver';
 import * as mm from '@magenta/music/es6/core';
-import {NoteSequence} from '@magenta/music/es6/protobuf';
+import {NoteSequence, INoteSequence} from '@magenta/music/es6/protobuf';
 import * as ns_util from './ns_util';
 
 
 const config = {apiUrl: '.'};
-export function init(cfg) {
+export function init(cfg: any) {
   Object.assign(config, cfg);
 }
 
 const VISUALIZER_CONFIG = {
   pixelsPerTimeStep: 40,
   noteHeight: 4,
-};
+} as mm.VisualizerConfig;
 const INSTRUMENT_NAMES = [
   "Acoustic Grand Piano", "Bright Acoustic Piano", "Electric Grand Piano", "Honky-tonk Piano", "Electric Piano 1", "Electric Piano 2", "Harpsichord", "Clavinet", "Celesta", "Glockenspiel", "Music Box", "Vibraphone", "Marimba", "Xylophone", "Tubular Bells", "Dulcimer", "Drawbar Organ", "Percussive Organ", "Rock Organ", "Church Organ", "Reed Organ", "Accordion", "Harmonica", "Tango Accordion", "Acoustic Guitar (nylon)", "Acoustic Guitar (steel)", "Electric Guitar (jazz)", "Electric Guitar (clean)", "Electric Guitar (muted)", "Overdriven Guitar", "Distortion Guitar", "Guitar Harmonics", "Acoustic Bass", "Electric Bass (finger)", "Electric Bass (pick)", "Fretless Bass", "Slap Bass 1", "Slap Bass 2", "Synth Bass 1", "Synth Bass 2", "Violin", "Viola", "Cello", "Contrabass", "Tremolo Strings", "Pizzicato Strings", "Orchestral Harp", "Timpani", "String Ensemble 1", "String Ensemble 2", "Synth Strings 1", "Synth Strings 2", "Choir Aahs", "Voice Oohs", "Synth Choir", "Orchestra Hit", "Trumpet", "Trombone", "Tuba", "Muted Trumpet", "French Horn", "Brass Section", "Synth Brass 1", "Synth Brass 2", "Soprano Sax", "Alto Sax", "Tenor Sax", "Baritone Sax", "Oboe", "English Horn", "Bassoon", "Clarinet", "Piccolo", "Flute", "Recorder", "Pan Flute", "Blown bottle", "Shakuhachi", "Whistle", "Ocarina", "Lead 1 (square)", "Lead 2 (sawtooth)", "Lead 3 (calliope)", "Lead 4 chiff", "Lead 5 (charang)", "Lead 6 (voice)", "Lead 7 (fifths)", "Lead 8 (bass + lead)", "Pad 1 (new age)", "Pad 2 (warm)", "Pad 3 (polysynth)", "Pad 4 (choir)", "Pad 5 (bowed)", "Pad 6 (metallic)", "Pad 7 (halo)", "Pad 8 (sweep)", "FX 1 (rain)", "FX 2 (soundtrack)", "FX 3 (crystal)", "FX 4 (atmosphere)", "FX 5 (brightness)", "FX 6 (goblins)", "FX 7 (echoes)", "FX 8 (sci-fi)", "Sitar", "Banjo", "Shamisen", "Koto", "Kalimba", "Bagpipe", "Fiddle", "Shanai", "Tinkle Bell", "Agogo", "Steel Drums", "Woodblock", "Taiko Drum", "Melodic Tom", "Synth Drum", "Reverse Cymbal", "Guitar Fret Noise", "Breath Noise", "Seashore", "Bird Tweet", "Telephone Ring", "Helicopter", "Applause", "Gunshot"
-];
+] as const;
 const DRUMS = ns_util.DRUMS;
 
+interface ErrorMessage {
+  title: string;
+  message: string;
+}
 const ERROR_MESSAGES = {
   'STYLE_INPUT_TOO_LONG': {
     title: 'Input too long',
     message: 'The given style input is too long. Please use the ‘Start bar’ and ‘End bar’ fields to select an 8-bar (32-beat) section.'
   }
-};
+} as Record<string, ErrorMessage>;
 
-const data = {content: {}, style: {}, output: {}, remix: {}};
+interface SequenceData {
+  sequence?: INoteSequence;
+  fullSequence?: INoteSequence;
+  trimmedSequence?: INoteSequence;
+  section?: HTMLElement;
+  player?: mm.SoundFontPlayer;
+  visualizer?: mm.PianoRollSVGVisualizer;
+  visualizerConfig?: mm.VisualizerConfig;
+  tempo?: number;
+  beats?: number[];
+}
+
+const SEQ_IDS = ['content', 'style', 'output', 'remix'] as const;
+type SequenceId = (typeof SEQ_IDS)[number];
+const data = {} as Record<SequenceId, SequenceData>;
+for (const seqId of SEQ_IDS) { data[seqId] = {}; }
+
 var controlCount = 0;  // counter used for assigning IDs to dynamically created controls
 
 $('.section[data-sequence-id]').each(function() {
-  data[$(this).data('sequence-id')].section = this;
+  data[getSeqId($(this))].section = this;
 });
 
 $('form').submit(function(e){ e.preventDefault(); });
@@ -45,14 +65,14 @@ $('#presetsButton').click(function() {
 });
 
 $('input.midi-input').on('change', function() {
-  const file = this.files[0];
+  const el = this as HTMLInputElement;
+  const file = el.files[0];
   if (!file) return;
 
-  const section = $(this).closest('[data-sequence-id]');
-  const seqId = section.data('sequence-id');
+  const section = $(el).closest('[data-sequence-id]');
 
   setControlsEnabled(section, false);
-  $(this).siblings('.custom-file-label').text(this.files[0].name);
+  $(el).siblings('.custom-file-label').text(el.files[0].name);
 
   mm.blobToNoteSequence(file).then(function(seq) {
     seq.filename = file.name;
@@ -60,7 +80,7 @@ $('input.midi-input').on('change', function() {
     initSequence(section, seq);
     initTrimControls(section);
 
-    showMore(seqId + '-loaded');
+    showMore(getSeqId(section) + '-loaded');
   }).catch(handleError).finally(() => setControlsEnabled(section, true));
 });
 
@@ -68,16 +88,16 @@ $('.start-time, .end-time').on('change', handleSequenceEdit);
 
 $('.tempo').on('change', function() {
   const section = $(this).closest('[data-sequence-id]');
-  const seqId = section.data('sequence-id');
+  const seqId = getSeqId(section);
 
-  data[seqId].tempo = $(this).val();
+  data[seqId].tempo = parseInt($(this).val() as string);
   if (data[seqId].player)
     data[seqId].player.setTempo(data[seqId].tempo);
 });
 
 $('.play-button').on('click', function() {
   const section = $(this).closest('[data-sequence-id]');
-  const seqId = section.data('sequence-id');
+  const seqId = getSeqId(section);
 
   if (!data[seqId].player)
     data[seqId].player = new mm.SoundFontPlayer(
@@ -126,16 +146,16 @@ $('.play-button').on('click', function() {
 
 $('.seek-slider').on('input', function() {
   const section = $(this).closest('[data-sequence-id]');
-  const seqId = section.data('sequence-id');
+  const seqId = getSeqId(section);
 
   data[seqId].player.pause();
-  data[seqId].player.seekTo($(this).val());
+  data[seqId].player.seekTo(parseInt($(this).val() as string));
   data[seqId].player.resume();
 });
 
 $('.save-button').on('click', function() {
   const section = $(this).closest('[data-sequence-id]');
-  const seqId = section.data('sequence-id');
+  const seqId = getSeqId(section);
 
   const seq = data[seqId].sequence;
   saveAs(new File([mm.sequenceProtoToMidi(seq)], seq.filename));
@@ -143,14 +163,13 @@ $('.save-button').on('click', function() {
 
 $('.generate-button').on('click', function() {
   const section = $(this).closest('[data-sequence-id]');
-  const seqId = section.data('sequence-id');
 
   // Create request
   const formData = new FormData();
   formData.append('content_input', new Blob([NoteSequence.encode(data['content'].sequence).finish()]), 'content_input');
   formData.append('style_input', new Blob([NoteSequence.encode(data['style'].sequence).finish()]), 'style_input');
-  formData.append('sample', $('#samplingCheckbox').is(':checked'));
-  formData.append('softmax_temperature', $('#samplingTemperature').val());
+  formData.append('sample', $('#samplingCheckbox').is(':checked').toString());
+  formData.append('softmax_temperature', $('#samplingTemperature').val().toString());
 
   setControlsEnabled(section, false);
   showWaiting(section, true);
@@ -158,10 +177,11 @@ $('.generate-button').on('click', function() {
   setControlsEnabled(remixSection, false);
   showWaiting(remixSection, true);
 
-  fetch(config.apiUrl + '/api/v1/style_transfer/' + $('#modelName').val() + '/', {method: 'POST', body: formData})
+  fetch(config.apiUrl + '/api/v1/style_transfer/' + $('#modelName').val() + '/',
+        {method: 'POST', body: formData})
     .then(ensureResponseOk, () => Promise.reject('Connection error'))
     .then((response) => response.arrayBuffer())
-    .then(function (buffer) {
+    .then(function(buffer) {
       stopAllPlayers();
 
       // Decode the protobuffer
@@ -187,8 +207,12 @@ $('#savePreset').on('click', function() {
   saveAs(new File([exportPreset()], data['output'].sequence.filename.replace(/\.mid$/, '.json')));
 });
 
-function initSequence(section, seq, visualizerConfig, staticMode) {
-  const seqId = section.data('sequence-id');
+function getSeqId(section: JQuery) {
+  return section.data('sequence-id') as SequenceId;
+}
+
+function initSequence(section: JQuery, seq: INoteSequence, visualizerConfig?: mm.VisualizerConfig, staticMode?: boolean) {
+  const seqId = getSeqId(section);
   data[seqId].trimmedSequence = seq;
   data[seqId].sequence = seq;
 
@@ -208,22 +232,21 @@ function initSequence(section, seq, visualizerConfig, staticMode) {
   section.find('.tempo').val(data[seqId].tempo);
 
   // Show piano roll
-  const svg = section.find('svg')[0];
   if (visualizerConfig) {
     // Override defaults with supplied values
     visualizerConfig = Object.assign(Object.assign({}, VISUALIZER_CONFIG), visualizerConfig);
   } else {
     visualizerConfig = VISUALIZER_CONFIG;
   }
-  data[seqId].visualizer = new mm.PianoRollSVGVisualizer(seq, svg, visualizerConfig);
-  section.find('.visualizer-container').scrollLeft(0);
+  data[seqId].visualizerConfig = visualizerConfig;
+  initVisualizer(seqId);
 
   if (seqId == 'remix') {
     const outputCheckboxes = addInstrumentCheckboxes(
         section.find('#remixOutputToggles'), seq, seqId);
     const contentCheckboxes = addInstrumentCheckboxes(
         section.find('#remixContentToggles'), data['content'].trimmedSequence, seqId,
-        Math.max(0, ...outputCheckboxes.map((_, e) => e.value)) + 1);
+        Math.max(0, ...outputCheckboxes.map((_, e) => parseInt(e.value))) + 1);
     contentCheckboxes.prop('checked', false);
     return;
   }
@@ -236,11 +259,17 @@ function initSequence(section, seq, visualizerConfig, staticMode) {
   }
 }
 
-function initTrimControls(section) {
-  const seqId = section.data('sequence-id');
+function initVisualizer(seqId: SequenceId) {
+  const section = $(data[seqId].section);
+  const svg = section.find('svg')[0];
+  data[seqId].visualizer = new mm.PianoRollSVGVisualizer(data[seqId].sequence, svg, data[seqId].visualizerConfig);
+  section.find('.visualizer-container').scrollLeft(0);
+}
+
+function initTrimControls(section: JQuery) {
+  const seqId = getSeqId(section);
   if (section.find('.start-time, .end-time').length === 0)
     return;
-  const seq = data[seqId].fullSequence;
   const maxTime = data[seqId].beats.length - 1;
   section.find('.start-time').val(0);
   section.find('.start-time').prop('max', maxTime - 1);
@@ -248,9 +277,7 @@ function initTrimControls(section) {
   section.find('.end-time').prop('max', maxTime);
 }
 
-function addInstrumentCheckboxes(parent, seq, seqId, instrumentOffset) {
-  instrumentOffset = instrumentOffset || 0;
-
+function addInstrumentCheckboxes(parent: JQuery, seq: INoteSequence, seqId: SequenceId, instrumentOffset = 0) {
   parent.empty();
   for (let [instrument, program] of ns_util.getInstrumentPrograms(seq)) {
     instrument = instrument + instrumentOffset;
@@ -272,17 +299,17 @@ function addInstrumentCheckboxes(parent, seq, seqId, instrumentOffset) {
   return parent.find('input');
 }
 
-function handleSequenceEdit() {
+function handleSequenceEdit(this: HTMLElement) {
   const control = $(this);
   const section = control.closest('[data-sequence-id]');
-  const seqId = section.data('sequence-id');
+  const seqId = getSeqId(section);
 
   showWaiting($('html'), true);
   delay().then(() => {
     var seq = data[seqId].fullSequence;
     if (seq) {
-      const startBeat = parseInt(section.find('.start-time').val());
-      const endBeat = parseInt(section.find('.end-time').val());
+      const startBeat = parseInt(section.find('.start-time').val() as string);
+      const endBeat = parseInt(section.find('.end-time').val() as string);
       // startBeat and endBeat will be NaN if the section has no trim controls.
       if (Number.isFinite(startBeat) && Number.isFinite(endBeat)) {
         // Cut a bit before the first beat, so that notes starting on the beat don't get removed.
@@ -299,7 +326,6 @@ function handleSequenceEdit() {
     }
 
     const instruments = getSelectedInstruments(section.find('.instrument-toggles :checked'));
-    data[seqId].selectedInstruments = instruments;
     seq = ns_util.filterByInstrument(seq, instruments);
 
     updateSequence(seqId, seq);
@@ -310,16 +336,23 @@ function handleSequenceEdit() {
   }).finally(() => showWaiting($('html'), false));
 }
 
-function initRemix(staticMode) {
+function initRemix(staticMode?: boolean) {
   const section = $('.section[data-sequence-id=remix]');
 
   $('#remixContentToggles input').prop('checked', false);
   if (!data['output'].trimmedSequence) return;
 
-  // Initialize with the output only, but make sure the visualizer is tall enough
-  initSequence(section, data['output'].trimmedSequence,
-               {minPitch: Math.min(data['output'].visualizer.config.minPitch, data['content'].visualizer.config.minPitch),
-                maxPitch: Math.max(data['output'].visualizer.config.maxPitch, data['content'].visualizer.config.maxPitch)},
+  // Make sure the visualizer is tall enough
+  let minPitch = 127, maxPitch = 0;
+  for (const seq of [data['output'].trimmedSequence, data['content'].trimmedSequence]) {
+    for (const note of seq.notes) {
+      minPitch = Math.min(minPitch, note.pitch);
+      maxPitch = Math.max(maxPitch, note.pitch);
+    }
+  }
+  minPitch = Math.min(minPitch, maxPitch);
+
+  initSequence(section, data['output'].trimmedSequence, {minPitch: minPitch, maxPitch: maxPitch},
                staticMode);
 
   if (!staticMode) {
@@ -332,20 +365,18 @@ function initRemix(staticMode) {
   }
 }
 
-function updateSequence(seqId, seq) {
+function updateSequence(seqId: SequenceId, seq: INoteSequence) {
   data[seqId].sequence = seq;
-  data[seqId].visualizer.noteSequence = seq;
-  data[seqId].visualizer.clear();
-  data[seqId].visualizer.redraw();
+  initVisualizer(seqId);
 }
 
-function setControlsEnabled(section, enabled) {
+function setControlsEnabled(section: JQuery, enabled: boolean) {
   section.find('input, button, select')
          .filter((_, e) => $(e).data('no-enable') === undefined)
          .prop('disabled', !enabled);
 }
 
-function handlePlaybackStop(seqId) {
+function handlePlaybackStop(seqId: SequenceId) {
   const section = $(data[seqId].section);
   const button = section.find('.play-button');
 
@@ -358,7 +389,7 @@ function handlePlaybackStop(seqId) {
 }
 
 export function stopAllPlayers() {
-  for (const seqId in data) {
+  for (const seqId of SEQ_IDS) {
     if (data[seqId].player && data[seqId].player.isPlaying()) {
       data[seqId].player.stop();
       handlePlaybackStop(seqId);
@@ -366,10 +397,7 @@ export function stopAllPlayers() {
   }
 }
 
-function showMore(label, scroll) {
-  if (scroll === undefined) {
-    scroll = true;
-  }
+function showMore(label: string, scroll = true) {
   const elements = $('.after-' + label);
   if (!elements.is(":visible")) {
     elements.fadeIn(
@@ -385,19 +413,19 @@ function showMore(label, scroll) {
   }
 }
 
-function getSelectedInstruments(checkboxes) {
+function getSelectedInstruments(checkboxes: JQuery<HTMLElement>) {
   return checkboxes.map((_, checkbox) => $(checkbox).val())
-    .map((_, p) => isNaN(p) ? p : parseInt(p))
+    .map((_, p) => Number(p))
     .get();
 }
 
 export function exportPreset() {
-  const dataCopy = {};
-  for (const seqId in data) {
+  const dataCopy = {} as any;
+  for (const seqId of SEQ_IDS) {
     dataCopy[seqId] = {};
     for (const key in data[seqId]) {
       if (!['player', 'visualizer', 'section', 'fullSequence'].includes(key)) {
-        var value = data[seqId][key];
+        var value = data[seqId][key as keyof SequenceData];
         if (value instanceof NoteSequence) {
           value = value.toJSON();
         }
@@ -411,18 +439,11 @@ export function exportPreset() {
   });
 }
 
-export function loadPreset(preset, staticMode) {
-  if (staticMode === undefined) {
-    staticMode = false;
-  }
-
-  // Make sure things are loaded in the correct order
-  const seqIds = ['content', 'style', 'output', 'remix'];
-
+export function loadPreset(preset: {[k: string]: any}, staticMode = false) {
   // Load full sequence data
-  seqIds.forEach((seqId) => {
+  for (const seqId of SEQ_IDS) {
     // Convert NoteSequences from JSON
-    const presetData = {};
+    const presetData = {} as any;
     for (const key in preset.data[seqId]) {
       presetData[key] = preset.data[seqId][key];
       if (presetData[key].notes) {
@@ -436,37 +457,37 @@ export function loadPreset(preset, staticMode) {
       initSequence($(data[seqId].section), presetData.trimmedSequence, undefined, staticMode);
     }
     Object.assign(data[seqId], presetData);
-  });
+  }
 
   // Restore control states
   $('input[type="radio"], input[type="checkbox"]').prop('checked', false);
-  preset.controls.forEach((ctrl) => {
-    document.getElementsByName(ctrl.name).forEach((e) => {
+  for (const ctrl of preset.controls) {
+    for (const e of document.getElementsByName(ctrl.name) as NodeListOf<HTMLInputElement>) {
       if (['radio', 'checkbox'].includes(e.type)) {
         e.checked = true;
       } else {
         e.value = ctrl.value;
       }
-    });
-  });
+    }
+  }
 
   // Re-initialize controls if not in static mode
   if (!staticMode) {
-    seqIds.forEach((seqId) => { initTrimControls($(data[seqId].section)); });
+    SEQ_IDS.forEach((seqId) => { initTrimControls($(data[seqId].section)); });
   }
 
   // Load the edited (filtered & remixed) sequences
-  seqIds.forEach((seqId) => {
+  for (const seqId of SEQ_IDS) {
     updateSequence(seqId, data[seqId].sequence);
 
     // Also set filenames
     $(data[seqId].section).find('.custom-file label').text(data[seqId].sequence.filename);
 
     showMore(seqId + '-loaded', false);
-  });
+  }
 }
 
-export function loadPresetFromUrl(url, contentName, styleName, staticMode) {
+export function loadPresetFromUrl(url: string, contentName: string, styleName: string, staticMode?: boolean) {
   stopAllPlayers();
 
   $('#loadingModal .loading-text').text('Loading…');
@@ -492,7 +513,7 @@ export function loadPresetFromUrl(url, contentName, styleName, staticMode) {
     });
 }
 
-function ensureResponseOk(response) {
+function ensureResponseOk(response: Response) {
   if (!response.ok) {
     const contentType = response.headers.get('Content-Type');
     if (contentType && contentType.startsWith('text/plain')) {
@@ -504,7 +525,7 @@ function ensureResponseOk(response) {
   return response;
 }
 
-function handleError(error) {
+function handleError(error: any) {
   try {
     var text = '';
     if (error) {
@@ -527,7 +548,7 @@ function handleError(error) {
   }
 }
 
-function showWaiting(element, waiting) {
+function showWaiting(element: JQuery, waiting = true) {
   if (waiting) {
     element.data('in-progress', (element.data('in-progress') || 0) + 1);
     element.addClass('cursor-progress');
@@ -539,6 +560,6 @@ function showWaiting(element, waiting) {
   }
 }
 
-function delay(time) {
-  return new Promise(resolve => setTimeout(() => resolve(), time || 0));
+function delay(time = 0) {
+  return new Promise(resolve => setTimeout(() => resolve(), time));
 }

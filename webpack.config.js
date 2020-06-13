@@ -3,7 +3,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 
 const config = {
   devtool: 'eval-source-map',
-  entry: __dirname + '/src/js/main.js',
+  entry: __dirname + '/src/js/main.ts',
   output:{
     path: __dirname + '/dist',
     filename: 'bundle.js',

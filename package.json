@@ -12,6 +12,7 @@
     "@babel/core": "^7.10.2",
     "@babel/preset-env": "^7.10.2",
     "@types/bootstrap": "^4.5.0",
+    "@types/file-saver": "^2.0.1",
     "@types/jquery": "^3.3.38",
     "autoprefixer": "^9.7.4",
     "babel-loader": "^8.1.0",
