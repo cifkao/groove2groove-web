@@ -424,7 +424,7 @@ export function exportPreset() {
   for (const seqId of SEQ_IDS) {
     dataCopy[seqId] = {};
     for (const key in data[seqId]) {
-      if (!['player', 'visualizer', 'section', 'fullSequence'].includes(key)) {
+      if (!['player', 'visualizer', 'visualizerConfig', 'section', 'fullSequence', 'beats'].includes(key)) {
         var value = data[seqId][key as keyof SequenceData];
         if (value instanceof NoteSequence) {
           value = value.toJSON();
