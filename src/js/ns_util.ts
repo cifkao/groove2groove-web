@@ -2,7 +2,7 @@ import * as mm from '@magenta/music/es6/core';
 import {INoteSequence, NoteSequence} from '@magenta/music/es6/protobuf';
 
 export const DRUMS = 'DRUMS';
-export type ProgramSpec = number | 'DRUMS';
+export type ProgramSpec = number | typeof DRUMS;
 
 export function filterByInstrument(ns: INoteSequence, instruments: number[], inPlace = false) {
   const instrumentSet = new Set<number>();
