@@ -20,7 +20,9 @@ const VISUALIZER_CONFIG = {
 
 const DRUMS = ns_util.DRUMS;
 const INSTRUMENT_NAMES = instrumentByPatchID.map(
-  (s) => s.replace(/\b\w/g, (m) => m.toUpperCase()));
+  (s) => s
+    .replace(/\b\w/g, (m) => m.toUpperCase())
+    .replace(/\(.*\)/, (m) => m.toLowerCase()));
 
 interface ErrorMessage {
   title: string;
