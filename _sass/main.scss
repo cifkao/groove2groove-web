@@ -1,6 +1,55 @@
-$icon-font-path: "~open-iconic/font/fonts/";
-@import "~bootstrap/scss/bootstrap";
-@import "~open-iconic/font/css/open-iconic-bootstrap";
+nav.navbar {
+  background-color: $black;
+}
+
+header {
+  position: relative;
+  display: block;
+  background: no-repeat center center;
+  // background-color: $dark;
+  background-color: #555;
+  background-attachment: scroll;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-blend-mode: multiply;
+
+  .container {
+    color: #fff;
+    text-align: center;
+    padding-bottom: 50px;
+
+    h1 {
+      font-size: 50px;
+      font-weight: bold;
+      margin-top: 0;
+
+      @include media-breakpoint-down(sm) {
+        font-size: 35px;
+      }
+
+      @include media-breakpoint-down(xs) {
+        font-size: 30px;
+      }
+    }
+    .subheading {
+      font-size: 24px;
+      font-weight: 300;
+      line-height: 1.1;
+      display: block;
+      margin: 10px 0 0;
+
+      @include media-breakpoint-down(sm) {
+        font-size: 20px;
+      }
+
+      @include media-breakpoint-down(xs) {
+        font-size: 1rem;
+      }
+    }
+  }
+}
 
 
 /* Sticky footer */
@@ -24,10 +73,15 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 95%;
-  background-color: #f5f5f5;
+  background-color: #eee;
+  color: #555;
 }
 /* End sticky footer */
 
+.content {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
 
 .cursor-progress, .cursor-progress * {
   cursor: progress;

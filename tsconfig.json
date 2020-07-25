@@ -20,7 +20,7 @@
     "module": "es6",
     "moduleResolution": "node"
   },
-  "include": [ "src" ],
+  "include": [ "_js" ],
   "exclude": [
     "node_modules"
   ]

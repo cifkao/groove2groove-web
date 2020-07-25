@@ -1,0 +1,27 @@
+url: "https://groove2groove.telecom-paris.fr"
+baseurl: "/"
+title: "Groove2Groove"
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      entry: common
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - .git
+  - .history-*
+  - package.json
+  - yarn.lock
+  - yarn-error.log
+  - webpack.*.js
+  - tsconfig.json
+  - dist
+  - deploy.sh

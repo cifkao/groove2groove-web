@@ -1,6 +1,4 @@
-import '../scss/main.scss';
-
-import 'bootstrap/js/dist/modal';
+import './common';
 import {saveAs} from 'file-saver';
 import * as mm from '@magenta/music/es6/core';
 import {NoteSequence, INoteSequence} from '@magenta/music/es6/protobuf';
