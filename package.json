@@ -41,6 +41,7 @@
     "@magenta/music": "^1.14.0",
     "@tonejs/midi": "^2.0.23",
     "bootstrap": "^4.4.1",
+    "bootstrap4-toggle": "^3.6.1",
     "core-js": "^3.6.4",
     "file-saver": "^2.0.2",
     "jquery": "^3.4.1",

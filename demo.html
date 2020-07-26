@@ -3,10 +3,14 @@ layout: default
 entry: demo
 after: |
   <script>
+    main.init({
+      apiUrl: 'https://indexweb.enst.fr:5000'
+    });
+
     $('button[data-preset-url]').click(function(event) {
       event.preventDefault();
       $('#presetModal').modal('hide');
-      main.loadPresetFromUrl(this.dataset.presetUrl, this.dataset.contentName, this.dataset.styleName, true);
+      main.loadPresetFromUrl(this.dataset.presetUrl);  //, this.dataset.contentName, this.dataset.styleName, true);
     });
   </script>
 ---
@@ -22,82 +26,67 @@ after: |
 </style>
 
 <main class="container">
-  <h1>Demo</h1>
-  <p>This is a static version of our demo, containing pre-generated examples. The interactive demo can be found <a href="/restricted/demo-full.html">here</a>.</p>
-  <p>For each example, you will see first the two inputs, then the generated accompaniment, and finally a remix of the accompaniment with the original melody.
-     You can play or save each file, choosing the tracks that you want to include.
-     In some cases, we have muted some of the tracks to reduce clutter, but you can unmute them by checking the corresponding boxes.</p>
-  <p>We recommend listening through headphones. If you experience glitches during playback, try refreshing the page, opening it with a recent version of Google Chrome, or saving the MIDI file and playing it locally.</p>
-  <table class="table">
-    <colgroup>
-      <col style="width: 8em">
-    </colgroup>
-    <thead>
-      <tr><th></th><th>Content</th><th>Style</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><button class="btn btn-block btn-success" data-preset-url="{{ "/assets/presets/inwalked__december.json" | relative_url }}" data-content-name="In Walked Bud" data-style-name="December"><span class="oi icon-sm oi-arrow-circle-bottom" title="Load" aria-hidden="true"></span> Load</button></td>
-        <td>In Walked Bud (Thelonious Monk, unknown version) <a href="https://youtu.be/FuHjgKQDofs?t=13" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
-        <td>December (Collective Soul) <a href="https://youtu.be/6exsatE-DUk?t=189" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
-      </tr>
-      <tr>
-        <td><button class="btn btn-block btn-success" data-preset-url="{{ "/assets/presets/lithium__fanvoy.json" | relative_url }}" data-content-name="Lithium" data-style-name="Fantastic Voyage"><span class="oi icon-sm oi-arrow-circle-bottom" title="Load" aria-hidden="true"></span> Load</button></td>
-        <td>Lithium (Nirvana) <a href="https://youtu.be/pkcJEvMcnEg" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
-        <td>Fantastic Voyage (Lakeside) <a href="https://youtu.be/-1YjmXSyHa8?t=125" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
-      </tr>
-      <tr>
-        <td><button class="btn btn-block btn-success" data-preset-url="{{ "/assets/presets/yursong__atIknew.json" | relative_url }}" data-content-name="Your Song" data-style-name="And Then I Knew"><span class="oi icon-sm oi-arrow-circle-bottom" title="Load" aria-hidden="true"></span> Load</button></td>
-        <td>Your Song (Elton John) <a href="https://youtu.be/GlPlfCy1urI" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
-        <td>And Then I Knew (Pat Metheny) <a href="https://youtu.be/35iZSbmRie8?t=71" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
-      </tr>
-      <tr>
-        <td><button class="btn btn-block btn-success" data-preset-url="{{ "/assets/presets/cumparsita_tango__sunflower.json" | relative_url }}" data-content-name="La cumparsita" data-style-name="Little Sunflower"><span class="oi icon-sm oi-arrow-circle-bottom" title="Load" aria-hidden="true"></span> Load</button></td>
-        <td>La cumparsita (Gerardo Matos Rodríguez) <a href="https://youtu.be/NY0MLG-IrSU" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
-        <td>Little Sunflower (Freddie Hubbard, unknown version) <a href="https://youtu.be/OtB8dEuEmNM" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
-      </tr>
-      <tr>
-        <td><button class="btn btn-block btn-success" data-preset-url="{{ "/assets/presets/Mendelssohn-ViolinConcerto64-Alegro__van_halen-jump.json" | relative_url }}" data-content-name="Violin Concerto in E minor, I. Allegro molto appassionato" data-style-name="Jump"><span class="oi icon-sm oi-arrow-circle-bottom" title="Load" aria-hidden="true"></span> Load</button></td>
-        <td>Violin Concerto Op. 64 (Mendelssohn) <a href="https://youtu.be/fc00OQw59lM" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
-        <td>Jump (Van Halen) <a href="https://youtu.be/SwYN7mTi6HM?t=14" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
-      </tr>
-      <tr>
-        <td><button class="btn btn-block btn-success" data-preset-url="{{ "/assets/presets/james_brown-i_feel_good__TECHNO.json" | relative_url }}" data-content-name="I Got You (I Feel Good)" data-style-name="TECHNO.MID"><span class="oi icon-sm oi-arrow-circle-bottom" title="Load" aria-hidden="true"></span> Load</button></td>
-        <td>I Got You (I Feel Good) (James Brown) <a href="https://youtu.be/U5TqIdff_DQ" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
-        <td>TECHNO.MID (artist unknown)</td>
-      </tr>
-      <tr>
-        <td><button class="btn btn-block btn-success" data-preset-url="{{ "/assets/presets/Ill_Be_Missing_You__halfn.json" | relative_url }}" data-content-name="I'll Be Missing You" data-style-name="Half Nelson"><span class="oi icon-sm oi-arrow-circle-bottom" title="Load" aria-hidden="true"></span> Load</button></td>
-        <td>I'll Be Missing You (Puff Daddy/Sting) <a href="https://youtu.be/NKMtZm2YuBE?t=15" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
-        <td>Half Nelson (Miles Davis, unknown version)</td>
-      </tr>
-    </tbody>
-  </table>
+  <h1>Style transfer demo</h1>
+  <div class="content" style="display: none;">
+    <div class="card floating-card">
+      <div class="card-header">
+        <big class="d-flex" style="align-items: center;">
+          <div class="mr-auto">Advanced mode</div>
+          <input id="advancedModeToggle" type="checkbox" data-toggle="toggle" data-onstyle="success" data-width="80" data-height="22">
+        </big>
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          In advanced mode, you can upload arbitrary MIDI files as inputs and change the model settings.
+        </p>
+      </div>
+    </div>
 
-  <div class="after-output-loaded mt-2" style="display: none;">
+    <div data-hide-in-advanced>
+      <p>Click <strong>Load example</strong> below and pick one of the available examples.</p>
+      <p>For each example, you will see first the two inputs (<strong>content</strong> and <strong>style</strong>), then the generated accompaniment, and finally a remix of the accompaniment with the original melody.
+         You can play or save each file, choosing the tracks that you want to include.
+         In some cases, we have muted some of the tracks to reduce clutter, but you can unmute them by checking the corresponding boxes.</p>
+      <p>We recommend listening through headphones. If you experience glitches during playback, try refreshing the page, opening it with a recent version of Google Chrome, or saving the MIDI file and playing it locally.</p>
+    </div>
+
+    <p data-show-in-advanced>Either pick one of the pre-generated examples, or upload your own content &amp; style input by clicking <strong>Browse</strong> below. Bear in mind that some files work better than others due to possible mistakes in metadata or other inconsistencies common in MIDI files found in the wild.</p>
+
+    <div class="row mt-1 mb-3">
+      <div class="col-lg-4 col-sm-2"></div>
+      <div class="col-lg-4 col-sm-8">
+        <button type="button" id="presetsButton" class="btn btn-block btn-primary"><span class="oi oi-spreadsheet" aria-hidden="true"></span> Load example&hellip;</button>
+      </div>
+      <div class="col-lg-4 col-sm-2"></div>
+    </div>
+
+    <p data-show-in-advanced>We recommend listening through headphones. If you experience glitches during playback, try refreshing the page, opening it with a recent version of Google Chrome, or saving the MIDI file and playing it locally.</p>
+
     <div class="section" data-sequence-id="content">
-      <h2>Content input</h2>
-      <div class="row">
+      <h2 id="conent-input">Content input</h2>
+      <p data-show-in-advanced>Pick a song to cover. The song needs to be in 4/4, so don't pick a waltz!
+         <span class='after-content-loaded'>You can choose a specific section of the song by specifying the start and end time in beats below. Please make sure that it starts on a downbeat.</span></p>
+      <div class="row" style="clear: both">
         <div class="input-group col-md-4 col-lg-6 mb-1 mb-md-0">
-          <div class="input-group-prepend">
-            <label for="contentFilename" class="input-group-text">File</label>
+          <div class="custom-file">
+             <input id="contentFile" name="contentFile" type="file" class="custom-file-input midi-input" disabled data-enable-in-advanced>
+             <label for="contentFile" class="custom-file-label text-truncate">Choose MIDI file&hellip;</label>
           </div>
-          <input type="text" class="form-control" id="contentFilename" name="contentFilename" disabled data-no-enable>
         </div>
-        <div class="input-group col-sm-6 col-md-4 col-lg-3 mb-1 mb-sm-0">
+        <div class="input-group col-sm-6 col-md-4 col-lg-3 mb-1 mb-sm-0 after-content-loaded">
           <div class="input-group-prepend">
             <label for="contentStartTime" class="input-group-text">Start beat</label>
           </div>
-          <input type="number" class="form-control start-time" id="contentStartTime" name="contentStartTime" value="0" min="0" step="1" disabled data-no-enable>
+          <input type="number" class="form-control start-time" id="contentStartTime" name="contentStartTime" value="0" min="0" step="1" disabled data-enable-in-advanced>
         </div>
-        <div class="input-group col-sm-6 col-md-4 col-lg-3">
+        <div class="input-group col-sm-6 col-md-4 col-lg-3 after-content-loaded">
           <div class="input-group-prepend">
             <label for="contentEndTime" class="input-group-text">End beat</label>
           </div>
-          <input type="number" class="form-control end-time" id="contentEndTime" name="contentEndTime" min="0" step="1" disabled data-no-enable>
+          <input type="number" class="form-control end-time" id="contentEndTime" name="contentEndTime" min="0" step="1" disabled data-enable-in-advanced>
         </div>
       </div>
-      <div class="card visualizer-card mt-2">
+      <div class="card visualizer-card mt-2 after-content-loaded">
         <div class="card-header">
           <div class="d-flex flex-row">
             <div class="p-2">Instruments:</div>
@@ -129,29 +118,31 @@ after: |
         </div>
       </div>
     </div>
-    <div class="section" data-sequence-id="style">
+    <div class="section after-content-loaded" data-sequence-id="style">
       <h2>Style input</h2>
+      <p data-show-in-advanced>This is the song to take the style from.
+         <span class="after-style-loaded">For best results, pick an 8-bar (32-beat) section.</span></p>
       <div class="row">
         <div class="input-group col-md-4 col-lg-6 mb-1 mb-md-0">
-          <div class="input-group-prepend">
-            <label for="styleFilename" class="input-group-text">File</label>
+          <div class="custom-file">
+             <input id="styleFile" name="styleFile" type="file" class="custom-file-input midi-input" disabled data-enable-in-advanced>
+             <label for="styleFile" class="custom-file-label text-truncate">Choose MIDI file...</label>
           </div>
-          <input type="text" class="form-control" id="styleFilename" name="styleFilename" disabled data-no-enable>
         </div>
-        <div class="input-group col-sm-6 col-md-4 col-lg-3 mb-1 mb-sm-0">
+        <div class="input-group col-sm-6 col-md-4 col-lg-3 mb-1 mb-sm-0 after-style-loaded">
           <div class="input-group-prepend">
             <label for="styleStartTime" class="input-group-text">Start beat</label>
           </div>
-          <input type="number" class="form-control start-time" id="styleStartTime" name="styleStartTime" value="0" min="0" step="1" disabled data-no-enable>
+          <input type="number" class="form-control start-time" id="styleStartTime" name="styleStartTime" value="0" min="0" step="1" disabled data-enable-in-advanced>
         </div>
-        <div class="input-group col-sm-6 col-md-4 col-lg-3">
+        <div class="input-group col-sm-6 col-md-4 col-lg-3 after-style-loaded">
           <div class="input-group-prepend">
             <label for="styleEndTime" class="input-group-text">End beat</label>
           </div>
-          <input type="number" class="form-control end-time" id="styleEndTime" name="styleEndTime" min="0" step="1" disabled data-no-enable>
+          <input type="number" class="form-control end-time" id="styleEndTime" name="styleEndTime" min="0" step="1" disabled data-enable-in-advanced>
         </div>
       </div>
-      <div class="card visualizer-card mt-2">
+      <div class="card visualizer-card mt-2 after-style-loaded">
         <div class="card-header">
           <div class="d-flex flex-row">
             <div class="p-2">Instruments:</div>
@@ -183,9 +174,17 @@ after: |
         </div>
       </div>
     </div>
-    <div class="section" data-sequence-id="output">
+    <div class="section after-style-loaded" data-sequence-id="output">
       <h2>Output</h2>
-      <p>This is the accompaniment generated by our model when given the above inputs. Use the checkboxes below to mute or unmute individual tracks in order to hear them more clearly.</p>
+      <div data-hide-in-advanced>
+        <p>This is the accompaniment generated by our model when given the above inputs. Use the checkboxes below to mute or unmute individual tracks in order to hear them more clearly.</p>
+      </div>
+      <div data-show-in-advanced>
+        <p>Now listen to an accompaniment generated by one of our models (if you have loaded custom inputs above, click <strong>Generate</strong> now).
+           We recommend using the model <strong>without velocity</strong>, which generally gives the best results.</p>
+        <p>Feel free to hit Generate again (with sampling enabled) to get a different result.
+           Try playing around with the temperature to make the result sound more or less &lsquo;random&rsquo;, but do not get burnt (safe values are around 0.6)!</p>
+      </div>
       <form class="form-inline">
         <div class="input-group mb-1 mr-2">
           <div class="input-group-prepend">
@@ -193,25 +192,26 @@ after: |
               Model
             </div>
           </div>
-          <select class="form-control" id="modelName" name="modelName" disabled data-no-enable>
+          <select class="form-control" id="modelName" name="modelName" disabled data-enable-in-advanced>
             <option value="v01_drums">without velocity</option>
             <option value="v01_drums_vel">with velocity</option>
+            <option value="v01_drums_vel_perf">with velocity, &Delta;-encoding</option>
           </select>
         </div>
         <div class="input-group mb-1 mr-2">
-          <!--<div class="input-group-prepend">
-            <button type="button" class="btn btn-primary generate-button" disabled data-no-enable><span class="oi oi-cog" title="Generate" aria-hidden="true"></span> Generate</button>
-          </div>-->
           <div class="input-group-prepend">
+            <button type="button" class="btn btn-primary generate-button" disabled data-enable-in-advanced><span class="oi oi-cog" title="Generate" aria-hidden="true"></span> Generate</button>
+          </div>
+          <div>
             <div class="input-group-text">
-              <input type="checkbox" id="samplingCheckbox" name="samplingCheckbox" checked disabled data-no-enable>
+              <input type="checkbox" id="samplingCheckbox" name="samplingCheckbox" checked disabled data-enable-in-advanced>
               <label for="samplingCheckbox" class="ml-1 mb-0">Sample with temperature:</label>
             </div>
           </div>
-          <input type="number" class="form-control" id="samplingTemperature" name="samplingTemperature" value="0.6" min="0.0" step="0.1" style="max-width: 4.5em" disabled data-no-enable>
+          <input type="number" class="form-control" id="samplingTemperature" name="samplingTemperature" value="0.6" min="0.0" step="0.1" max="1.5" style="max-width: 4.5em" disabled data-enable-in-advanced>
         </div>
       </form>
-      <div class="card visualizer-card mt-2">
+      <div class="card visualizer-card mt-2 after-output-loaded">
         <div class="card-header">
           <div class="d-flex flex-row">
             <div class="p-2">Instruments:</div>
@@ -242,10 +242,11 @@ after: |
         </div>
       </div>
     </div>
-    <div class="section" data-sequence-id="remix">
+    <div class="section after-output-loaded" data-sequence-id="remix">
       <h2>Remix</h2>
-      <p>Here, we have created a real cover song by combining the generated accompaniment with some of the tracks of the content input. You can use the checkboxes below to change which tracks are included, and create your own remix.</p>
-      <div class="card visualizer-card mt-2">
+      <p data-hide-in-advanced>Here, we have created an actual cover song by combining the generated accompaniment with some of the tracks of the content input. You can use the checkboxes below to change which tracks are included, and create your own remix.</p>
+      <p data-show-in-advanced>Create an actual cover song by remixing the output with some of the original tracks (e.g.&nbsp;melody)!</p>
+      <div class="card visualizer-card mt-2 after-output-loaded">
         <div class="card-header">
           <div class="d-flex flex-row">
             <div class="p-2">Output:</div>
@@ -282,6 +283,66 @@ after: |
     </div>
   </div>
 </main>
+
+<div class="modal" id="presetModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Examples</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <colgroup>
+            <col style="width: 8em">
+          </colgroup>
+          <thead>
+            <tr><th></th><th>Content</th><th>Style</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><button class="btn btn-block btn-success" data-preset-url="{{ "/assets/presets/inwalked__december.json" | relative_url }}" data-content-name="In Walked Bud" data-style-name="December"><span class="oi icon-sm oi-arrow-circle-bottom" title="Load" aria-hidden="true"></span> Load</button></td>
+              <td>In Walked Bud (Thelonious Monk, unknown version) <a href="https://youtu.be/FuHjgKQDofs?t=13" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
+              <td>December (Collective Soul) <a href="https://youtu.be/6exsatE-DUk?t=189" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
+            </tr>
+            <tr>
+              <td><button class="btn btn-block btn-success" data-preset-url="{{ "/assets/presets/lithium__fanvoy.json" | relative_url }}" data-content-name="Lithium" data-style-name="Fantastic Voyage"><span class="oi icon-sm oi-arrow-circle-bottom" title="Load" aria-hidden="true"></span> Load</button></td>
+              <td>Lithium (Nirvana) <a href="https://youtu.be/pkcJEvMcnEg" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
+              <td>Fantastic Voyage (Lakeside) <a href="https://youtu.be/-1YjmXSyHa8?t=125" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
+            </tr>
+            <tr>
+              <td><button class="btn btn-block btn-success" data-preset-url="{{ "/assets/presets/yursong__atIknew.json" | relative_url }}" data-content-name="Your Song" data-style-name="And Then I Knew"><span class="oi icon-sm oi-arrow-circle-bottom" title="Load" aria-hidden="true"></span> Load</button></td>
+              <td>Your Song (Elton John) <a href="https://youtu.be/GlPlfCy1urI" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
+              <td>And Then I Knew (Pat Metheny) <a href="https://youtu.be/35iZSbmRie8?t=71" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
+            </tr>
+            <tr>
+              <td><button class="btn btn-block btn-success" data-preset-url="{{ "/assets/presets/cumparsita_tango__sunflower.json" | relative_url }}" data-content-name="La cumparsita" data-style-name="Little Sunflower"><span class="oi icon-sm oi-arrow-circle-bottom" title="Load" aria-hidden="true"></span> Load</button></td>
+              <td>La cumparsita (Gerardo Matos Rodríguez) <a href="https://youtu.be/NY0MLG-IrSU" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
+              <td>Little Sunflower (Freddie Hubbard, unknown version) <a href="https://youtu.be/OtB8dEuEmNM" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
+            </tr>
+            <tr>
+              <td><button class="btn btn-block btn-success" data-preset-url="{{ "/assets/presets/Mendelssohn-ViolinConcerto64-Alegro__van_halen-jump.json" | relative_url }}" data-content-name="Violin Concerto in E minor, I. Allegro molto appassionato" data-style-name="Jump"><span class="oi icon-sm oi-arrow-circle-bottom" title="Load" aria-hidden="true"></span> Load</button></td>
+              <td>Violin Concerto Op. 64 (Mendelssohn) <a href="https://youtu.be/fc00OQw59lM" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
+              <td>Jump (Van Halen) <a href="https://youtu.be/SwYN7mTi6HM?t=14" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
+            </tr>
+            <tr>
+              <td><button class="btn btn-block btn-success" data-preset-url="{{ "/assets/presets/james_brown-i_feel_good__TECHNO.json" | relative_url }}" data-content-name="I Got You (I Feel Good)" data-style-name="TECHNO.MID"><span class="oi icon-sm oi-arrow-circle-bottom" title="Load" aria-hidden="true"></span> Load</button></td>
+              <td>I Got You (I Feel Good) (James Brown) <a href="https://youtu.be/U5TqIdff_DQ" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
+              <td>TECHNO.MID (artist unknown)</td>
+            </tr>
+            <tr>
+              <td><button class="btn btn-block btn-success" data-preset-url="{{ "/assets/presets/Ill_Be_Missing_You__halfn.json" | relative_url }}" data-content-name="I'll Be Missing You" data-style-name="Half Nelson"><span class="oi icon-sm oi-arrow-circle-bottom" title="Load" aria-hidden="true"></span> Load</button></td>
+              <td>I'll Be Missing You (Puff Daddy/Sting) <a href="https://youtu.be/NKMtZm2YuBE?t=15" target="_blank"><span class="oi icon-sm oi-external-link" title="Listen on YouTube" aria-hidden="true"></span></a></td>
+              <td>Half Nelson (Miles Davis, unknown version)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="modal" id="loadingModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="display: none;">
   <div class="modal-dialog modal-dialog-centered" role="document">

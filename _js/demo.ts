@@ -59,11 +59,31 @@ $('.section[data-sequence-id]').each(function() {
 
 $('form').submit(function(e){ e.preventDefault(); });
 
-$('.after-content-loaded, .after-style-loaded, .after-output-loaded').hide();
-$('.container').fadeIn('fast');
+$('[data-show-in-advanced], .after-content-loaded, .after-style-loaded, .after-output-loaded').hide();
+$(data['content'].section).hide();
+$('main .content').fadeIn('fast');
 
 $('#presetsButton').click(function() {
   $('#presetModal').modal('show');
+});
+
+$('#advancedModeToggle').change(function() {
+  const checked = $(this).prop('checked');
+  $('[data-enable-in-advanced]').prop('disabled', !checked);
+  if (checked) {
+    $('[data-show-in-advanced]').show();
+    $('[data-hide-in-advanced]').hide();
+    $(data['content'].section).show();
+  } else {
+    $('[data-show-in-advanced]').hide();
+    $('[data-hide-in-advanced]').show();
+
+    if($('.after-output-loaded').not(':visible')) {
+      // If some parts of the page are still hidden, hide everything again.
+      $(data['content'].section).hide();
+      $('.after-content-loaded, .after-style-loaded, .after-output-loaded').hide();
+    }
+  }
 });
 
 $('input.midi-input').on('change', function() {
@@ -82,7 +102,7 @@ $('input.midi-input').on('change', function() {
     initSequence(section, seq);
     initTrimControls(section);
 
-    showMore(getSeqId(section) + '-loaded');
+    showMore('.after-' + getSeqId(section) + '-loaded');
   }).catch(handleError).finally(() => setControlsEnabled(section, true));
 });
 
@@ -194,7 +214,7 @@ $('.generate-button').on('click', function() {
 
       // Display the sequence
       initSequence(section, seq);
-      showMore('output-loaded');
+      showMore('.after-output-loaded');
     })
     .catch(handleError)
     .finally(() => {
@@ -399,20 +419,22 @@ export function stopAllPlayers() {
   }
 }
 
-function showMore(label: string, scroll = true) {
-  const elements = $('.after-' + label);
-  if (!elements.is(":visible")) {
-    elements.fadeIn(
-      'fast',
-      () => {
-        elements.find('.seek-slider').prop('disabled', true);  // Workaround for Bootstrap range
-        if (scroll) {
-          elements.filter('.visualizer-card').first().each((_, e) => {
-            e.scrollIntoView({behavior: 'smooth'});
+function showMore(selector: string, scroll = true) {
+  const elements = $(selector).not(':visible');
+  elements.fadeIn(
+    'fast',
+    () => {
+      elements.find('.seek-slider').prop('disabled', true);  // Workaround for Bootstrap range
+      if (scroll) {
+        const offset = $('nav.navbar').outerHeight() + 10;
+        elements.filter('.section, .visualizer-card').first().each((_, e) => {
+          window.scrollTo({
+            top: e.getBoundingClientRect().top + window.pageYOffset - offset,
+            behavior: 'smooth'
           });
-        }
-      });
-  }
+        });
+      }
+    });
 }
 
 function getSelectedInstruments(checkboxes: JQuery<HTMLElement>) {
@@ -485,8 +507,9 @@ export function loadPreset(preset: {[k: string]: any}, staticMode = false) {
     // Also set filenames
     $(data[seqId].section).find('.custom-file label').text(data[seqId].sequence.filename);
 
-    showMore(seqId + '-loaded', false);
+    showMore('.after-' + seqId + '-loaded', false);
   }
+  showMore('.section', true);
 }
 
 export function loadPresetFromUrl(url: string, contentName: string, styleName: string, staticMode?: boolean) {

@@ -99,6 +99,16 @@ main {
   cursor: progress;
 }
 
+.card.floating-card {
+  @include media-breakpoint-up(md) {
+    float: right;
+    width: 20rem;
+    margin-left: 10px;
+  }
+
+  margin-bottom: 10px;
+}
+
 
 $instrument-colors: $blue, $indigo, $pink, $red, $orange, $yellow, $green, $teal, $cyan;
 
