@@ -16,8 +16,6 @@ exclude:
   - vendor/cache/
   - vendor/gems/
   - vendor/ruby/
-  - .git
-  - .history-*
   - package.json
   - yarn.lock
   - yarn-error.log
@@ -25,3 +23,7 @@ exclude:
   - tsconfig.json
   - dist
   - deploy.sh
+  # dot files are excluded by default
+
+include:
+  - .htaccess
