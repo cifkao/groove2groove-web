@@ -220,7 +220,7 @@ $('.generate-button').on('click', function() {
 
       // Display the sequence
       initSequence(section, seq);
-      showMore('.after-output-loaded');
+      showMore('.after-output-loaded', true);
     })
     .catch(handleError)
     .finally(() => {
@@ -425,7 +425,7 @@ export function stopAllPlayers() {
   }
 }
 
-function showMore(selector: string, scroll = true) {
+function showMore(selector: string, scroll = false) {
   const elements = $(selector).not(':visible');
   elements.fadeIn(
     'fast',
@@ -513,7 +513,7 @@ export function loadPreset(preset: {[k: string]: any}, staticMode = false) {
     // Also set filenames
     $(data[seqId].section).find('.custom-file label').text(data[seqId].sequence.filename);
 
-    showMore('.after-' + seqId + '-loaded', false);
+    showMore('.after-' + seqId + '-loaded');
   }
   showMore('.section', true);
 }
