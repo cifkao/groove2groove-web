@@ -78,7 +78,7 @@ $('#advancedModeToggle').change(function() {
     $('[data-show-in-advanced]').hide();
     $('[data-hide-in-advanced]').show();
 
-    if($('.after-output-loaded').not(':visible')) {
+    if($('.after-output-loaded').not(':visible').length > 0) {
       // If some parts of the page are still hidden, hide everything again.
       $(data['content'].section).hide();
       $('.after-content-loaded, .after-style-loaded, .after-output-loaded').hide();
