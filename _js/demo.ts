@@ -67,6 +67,12 @@ $('#presetsButton').click(function() {
   $('#presetModal').modal('show');
 });
 
+$('button[data-preset-url]').click(function(event) {
+  event.preventDefault();
+  $('#presetModal').modal('hide');
+  main.loadPresetFromUrl(this.dataset.presetUrl);
+});
+
 $('#advancedModeToggle').change(function() {
   const checked = $(this).prop('checked');
   $('[data-enable-in-advanced]').prop('disabled', !checked);

@@ -6,12 +6,6 @@ after: |
     main.init({
       apiUrl: 'https://indexweb.enst.fr:5000'
     });
-
-    $('button[data-preset-url]').click(function(event) {
-      event.preventDefault();
-      $('#presetModal').modal('hide');
-      main.loadPresetFromUrl(this.dataset.presetUrl);  //, this.dataset.contentName, this.dataset.styleName, true);
-    });
   </script>
 ---
 
