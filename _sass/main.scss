@@ -48,6 +48,16 @@ header {
         font-size: 1rem;
       }
     }
+
+    .btn {
+      @include media-breakpoint-up(sm) {
+        @include button-size($btn-padding-y-lg, $btn-padding-x-lg, $btn-font-size-lg, $btn-line-height-lg, $btn-border-radius-lg);
+      }
+
+      @include media-breakpoint-up(xs) {
+        @include button-size($btn-padding-y-sm, $btn-padding-x-sm, $btn-font-size-sm, $btn-line-height-sm, $btn-border-radius-sm);
+      }
+    }
   }
 }
 
