@@ -61,6 +61,15 @@ header {
   }
 }
 
+/* Move anchors up to account for fixed navbar. */
+.anchor::before {
+  content: '';
+  display: block;
+  height:      60px;
+  margin-top: -60px;
+  visibility: hidden;
+}
+
 
 /* Sticky footer */
 body {
