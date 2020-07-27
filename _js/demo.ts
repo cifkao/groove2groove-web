@@ -61,6 +61,7 @@ $('form').submit(function(e){ e.preventDefault(); });
 
 $('[data-show-in-advanced], .after-content-loaded, .after-style-loaded, .after-output-loaded').hide();
 $(data['content'].section).hide();
+$('#pageLoadingIndicator').hide();
 $('main .content').fadeIn('fast');
 
 $('#presetsButton').click(function() {
