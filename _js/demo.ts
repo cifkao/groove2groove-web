@@ -71,7 +71,7 @@ $('#presetsButton').click(function() {
 $('button[data-preset-url]').click(function(event) {
   event.preventDefault();
   $('#presetModal').modal('hide');
-  main.loadPresetFromUrl(this.dataset.presetUrl);
+  loadPresetFromUrl(this.dataset.presetUrl);
 });
 
 $('#advancedModeToggle').change(function() {
@@ -519,7 +519,7 @@ export function loadPreset(preset: {[k: string]: any}, staticMode = false) {
   showMore('.section', true);
 }
 
-export function loadPresetFromUrl(url: string, contentName: string, styleName: string, staticMode?: boolean) {
+export function loadPresetFromUrl(url: string, contentName?: string, styleName?: string, staticMode?: boolean) {
   stopAllPlayers();
 
   $('#loadingModal .loading-text').text('Loading…');
