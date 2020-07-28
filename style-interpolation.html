@@ -1,0 +1,43 @@
+---
+title: Style interpolation
+layout: page
+entry: interpolation
+---
+<style type='text/css'>
+  #exampleTemplate {
+    display: none;
+  }
+
+  .example {
+    margin-bottom: 2ex;
+  }
+
+  .example .piano-roll {
+    max-width: 100%;
+  }
+</style>
+
+<h1>Style interpolation examples <span id="pageLoadingIndicator" class="loading-indicator spinner-border text-primary ml-2" style="font-size: 12px; position: relative; bottom: 2px;" role="status"></span></h1>
+<p>
+  The following are selected examples of interpolation between styles from the synthetic test set.
+  In each example, we linearly interpolate between the embeddings of two style inputs while the
+  content input is fixed.
+  Use the slider to adjust the interpolation coefficient <i>&alpha;</i> and watch the output change.
+</p>
+<p>
+  In the first three examples, we performed the interpolation twice&nbsp;&ndash; on a pair of bass embeddings and a pair of piano embeddings, respectively&nbsp;&ndash; and combined the outputs.
+  The last example is bass-only.
+</p>
+
+<div class="example" id="exampleTemplate">
+  <h3 class="heading"><span class="style-a"></span> &rarr; <span class="style-b"></span> <span id="pageLoadingIndicator" class="loading-indicator spinner-border text-primary ml-2" style="font-size: 12px; position: relative; bottom: 2px;" role="status"></span></h3>
+  <svg class="piano-roll"></svg>
+  <form class="form-inline">
+    <label style="font-variant-numeric: tabular-nums"><i>&alpha;</i>&nbsp;=&nbsp;<span class="alpha-value">0</span></label>
+    <input type="range" class="custom-range alpha-range ml-2" min="0" max="100" step="1" value="0" style="max-width: 200px">
+    <button type="button" class="btn btn-primary ml-2 play-button"><span class="oi oi-media-play" title="Play" aria-hidden="true"></button>
+  </form>
+</div>
+
+<div id="blendingExamples">
+</div>
