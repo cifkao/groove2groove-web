@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "rm -v -f assets/js/*.bundle.js assets/js/*.bundle.js.map _includes/webpack/* && bundle exec jekyll clean",
+    "clean": "rm -v -f assets/js/*.bundle.js assets/js/*.bundle.js.map _includes/webpack/*",
     "build": "webpack -p --progress --config webpack.prod.js && bundle exec jekyll build",
     "dev-build": "webpack --progress -d --config webpack.dev.js && bundle exec jekyll build",
     "serve": "http-server --port 4000 _site/",
-    "dev-serve": "webpack --config webpack.dev.js --watch | bundle exec jekyll serve --host=`hostname --fqdn` --livereload"
+    "dev-serve": "webpack --config webpack.dev.js --watch & bundle exec jekyll build --watch & live-server --host=`hostname --fqdn` --port=4000 _site"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
@@ -24,6 +24,7 @@
     "fibers": "^5.0.0",
     "file-loader": "^6.0.0",
     "http-server": "^0.12.3",
+    "live-server": "^1.2.1",
     "node-sass": "^4.13.1",
     "postcss-loader": "^3.0.0",
     "precss": "^4.0.0",
