@@ -1,2 +1,2 @@
 #!/bin/sh
-git subtree push --prefix dist deploy dist
+rsync -avzH --delete --exclude .htaccess _site/ groove2groove:www/
