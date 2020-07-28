@@ -1,8 +1,11 @@
 <meta charset="utf-8">
+<meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>
-  {% if page.title %}{{ page.title | escape }} &ndash; {{ site.title | escape }}
+  {% if page.title %}
+    {{ page.title | escape }}
+    {% unless page.title contains site.title %} &ndash; {{ site.title | escape }}{% endunless %}
   {% else %}{{ site.title | escape }}{% endif %}
 </title>
 <meta name="description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}">
