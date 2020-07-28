@@ -27,3 +27,8 @@ exclude:
 
 include:
   - .htaccess
+
+keep_files:
+  - .git
+  - .svn
+  - data
