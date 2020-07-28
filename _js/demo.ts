@@ -435,10 +435,7 @@ function showMore(selector: string, scroll = false) {
       if (scroll) {
         const offset = $('nav.navbar').outerHeight() + 10;
         elements.filter('.section, .visualizer-card').first().each((_, e) => {
-          window.scrollTo({
-            top: e.getBoundingClientRect().top + window.pageYOffset - offset,
-            behavior: 'smooth'
-          });
+          e.scrollIntoView();
         });
       }
     });
@@ -538,7 +535,7 @@ export function loadPresetFromUrl(url: string, contentName?: string, styleName?:
       if (styleName) {
         $('.section[data-sequence-id="style"] h2').text('Style input: ' + styleName);
       }
-      $('.section[data-sequence-id="content"]')[0].scrollIntoView({behavior: 'smooth'});
+      $('.section[data-sequence-id="content"]')[0].scrollIntoView();
     }).catch(handleError).finally(() => {
       $('#loadingModal').modal('hide');
       $('html').removeClass('cursor-progress');

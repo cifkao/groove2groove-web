@@ -1,12 +1,24 @@
+html {
+  scroll-behavior: smooth;
+}
+
 nav.navbar {
-  background-color: $black;
+  background-color: #000;
+
+  @include media-breakpoint-up(sm) {
+    background: transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+  }
 }
 
 header {
   position: relative;
   display: block;
   background: no-repeat center center;
-  // background-color: $dark;
   background-color: #555;
   background-attachment: scroll;
   -webkit-background-size: cover;
@@ -48,6 +60,13 @@ header {
         font-size: 1rem;
       }
     }
+    a {
+      color: inherit;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
 
     .btn {
       @include media-breakpoint-up(sm) {
@@ -59,15 +78,6 @@ header {
       }
     }
   }
-}
-
-/* Move anchors up to account for fixed navbar. */
-.anchor::before {
-  content: '';
-  display: block;
-  height:      60px;
-  margin-top: -60px;
-  visibility: hidden;
 }
 
 
@@ -99,7 +109,7 @@ footer.footer {
 /* End sticky footer */
 
 main {
-  padding-top: 20px;
+  padding-top: 40px;
   padding-bottom: 20px;
   flex: 1;
 }
