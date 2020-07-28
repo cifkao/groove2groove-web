@@ -31,6 +31,10 @@ const ERROR_MESSAGES = {
   'STYLE_INPUT_TOO_LONG': {
     title: 'Input too long',
     message: 'The given style input is too long. Please use the ‘Start bar’ and ‘End bar’ fields to select an 8-bar (32-beat) section.'
+  },
+  'RATE_LIMIT_EXCEEDED': {
+    title: 'Too many requests',
+    message: 'You have reached your limit. Please try again in a moment.'
   }
 } as Record<string, ErrorMessage>;
 
