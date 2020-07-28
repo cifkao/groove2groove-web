@@ -37,6 +37,8 @@ title: Groove2Groove – One-shot music style transfer
       </div>
       <div class="col-md-9 col-12" markdown="1">
 **Groove2Groove** (Grv2Grv) is an AI system for music accompaniment style transfer.
+Given two MIDI files – a **content input** and a **style input** – it can generate a new accompaniment
+for the first file in the style of the second one.
 </div>
     </div>
   </div>
