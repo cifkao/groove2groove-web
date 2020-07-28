@@ -5,7 +5,7 @@ const config = {
   entry: {
     common: __dirname + '/_js/common.ts',
     demo: __dirname + '/_js/demo.ts',
-		interpolation: __dirname + '/_js/interpolation.js'
+    interpolation: __dirname + '/_js/interpolation.js'
   },
   output:{
     path: __dirname + '/assets/js',
