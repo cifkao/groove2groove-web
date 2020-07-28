@@ -35,9 +35,9 @@ title: Groove2Groove – One-shot music style transfer
     <div class="row pt-4 pb-2">
       <div class="col-md-3 d-md-block d-none mb-3">
       </div>
-      <div class="col-md-9 col-12">
-        <p><strong>Groove2Groove</strong> (Grv2Grv) is an AI system for music accompaniment style transfer.</p>
-      </div>
+      <div class="col-md-9 col-12" markdown="1">
+**Groove2Groove** (Grv2Grv) is an AI system for music accompaniment style transfer.
+</div>
     </div>
   </div>
 
@@ -46,16 +46,15 @@ title: Groove2Groove – One-shot music style transfer
       <div class="col-md-3 col-12 mb-3">
         <h3 id="Paper" class="anchor">Paper &amp; additional resources</h3>
       </div>
-      <div class="col-md-9 col-12">
-        <p>The system is described in the paper <em>Groove2Groove: One-shot music style transfer with supervision from synthetic data</em>.</p>
-        <p>We provide the following resources to supplement the paper:</p>
-        <ul>
-          <li><a href="#Dataset">Dataset</a> used for training and evaluation</li>
-          <li><a href="https://github.com/cifkao/groove2groove" target="_blank">Source code</a> of the system and the evaluation metrics</li>
-          <li><a href="#">Configuration files</a> with hyperparameter settings</li>
-          <li><a href="{{ "/style-interpolation.html" | relative_url }}">Style interpolation (blending) examples</a></li>
-        </ul>
-      </div>
+      <div class="col-md-9 col-12" markdown="1">
+The system is described in the paper *Groove2Groove: One-shot music style transfer with supervision from synthetic data*.
+
+We provide the following resources to supplement the paper:
+  - [Dataset](#Dataset) used for training and evaluation
+  - [Source code](https://github.com/cifkao/groove2groove){:target="_blank"} of the system and the evaluation metrics
+  - [Configuration files](#) with hyperparameter settings
+  - [Style interpolation (blending) examples]({{ "/style-interpolation.html" | relative_url }})
+</div>
     </div>
   </div>
 
@@ -64,11 +63,10 @@ title: Groove2Groove – One-shot music style transfer
       <div class="col-md-3 col-12 mb-3">
         <h3 id="Dataset" class="anchor">Dataset</h3>
       </div>
-      <div class="col-md-9 col-12">
-{% capture markdown %}
+      <div class="col-md-9 col-12" markdown="1">
 The *Groove2Groove Dataset* is a parallel corpus of synthetic MIDI accompaniments in almost 3,000 different styles.
 The accompaniments were created from chord charts using the commercial
-<a href="https://www.pgmusic.com/" target="_blank">Band-in-a-Box</a>
+[Band-in-a-Box](https://www.pgmusic.com){:target="_blank"}
 accompaniment generation software as described in the paper.
 Each chord chart is rendered in at least two different styles, providing pairs of examples for supervised training.
 
@@ -106,9 +104,7 @@ entire chord chart is just one long A or B section, respectively.
 The chord charts were generated using language models trained on the iRb corpus (see the paper
 for further details). 5/6 of the chord charts are in major keys, the other 1/6 in minor keys
 (approximately following the distribution of keys in iRb).
-{% endcapture %}
-      {{ markdown | markdownify }}
-      </div>
+</div>
     </div>
   </div>
 </main>
