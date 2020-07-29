@@ -437,7 +437,6 @@ function showMore(selector: string, scroll = false) {
     () => {
       elements.find('.seek-slider').prop('disabled', true);  // Workaround for Bootstrap range
       if (scroll) {
-        const offset = $('nav.navbar').outerHeight() + 10;
         elements.filter('.section, .visualizer-card').first().each((_, e) => {
           e.scrollIntoView();
         });
