@@ -32,9 +32,11 @@ header {
     text-align: center;
     padding: 60px 15px 60px 15px;
 
-    h1 {
+    h1, .heading {
       font-size: 50px;
       font-weight: bold;
+      font-variant: small-caps;
+      letter-spacing: 0.075rem;
       margin-top: 0;
 
       @include media-breakpoint-down(sm) {
