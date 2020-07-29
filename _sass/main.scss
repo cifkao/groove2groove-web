@@ -81,8 +81,8 @@ header {
 }
 
 
-/* Sticky footer */
 body {
+  /* Sticky footer */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -102,11 +102,14 @@ footer.footer {
 
   .eu-flag {
     float: left;
-    height: 3.5rem;
     margin: 5px 10px 0 0;
+
+    height: 3.5rem;
+    @include media-breakpoint-down(sm) {
+      height: 2rem;
+    }
   }
 }
-/* End sticky footer */
 
 main {
   padding-top: 40px;
