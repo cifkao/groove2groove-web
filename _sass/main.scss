@@ -30,7 +30,7 @@ header {
   .container {
     color: #fff;
     text-align: center;
-    padding-bottom: 50px;
+    padding: 60px 15px 60px 15px;
 
     h1 {
       font-size: 50px;
@@ -112,6 +112,10 @@ main {
   padding-top: 40px;
   padding-bottom: 20px;
   flex: 1;
+
+  h1 {
+    margin-bottom: 1.5rem;
+  }
 }
 
 .cursor-progress, .cursor-progress * {
