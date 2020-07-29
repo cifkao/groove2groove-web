@@ -8,6 +8,9 @@ defaults:
     values:
       entry: common
 
+sass:
+  sourcemap: development
+
 exclude:
   - Gemfile
   - Gemfile.lock
