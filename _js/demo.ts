@@ -384,6 +384,8 @@ function initRemix(staticMode?: boolean) {
     }
   }
   minPitch = Math.min(minPitch, maxPitch);
+  minPitch -= 2;
+  maxPitch += 1;
 
   initSequence(section, data['output'].trimmedSequence, {minPitch: minPitch, maxPitch: maxPitch},
                staticMode);
