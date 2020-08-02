@@ -196,9 +196,12 @@ entry: demo
         </div>
         <div class="input-group mb-1 mr-2">
           <div class="input-group-prepend">
-            <button type="button" class="btn btn-primary generate-button" disabled data-enable-in-advanced><span class="oi oi-cog" title="Generate" aria-hidden="true"></span> Generate</button>
+            <button type="button" class="btn btn-primary generate-button" disabled data-enable-in-advanced>
+              <span data-show-in-advanced><span class="oi oi-cog" title="Generate" aria-hidden="true"></span> Generate</span>
+              <span data-hide-in-advanced><span class="oi oi-ban" title="Enable advanced mode to generate" aria-hidden="true"></span></span>
+            </button>
           </div>
-          <div class="input-group-prepend input-group-append">
+          <div class="input-group-prepend">
             <div class="input-group-text">
               <input type="checkbox" id="samplingCheckbox" name="samplingCheckbox" checked disabled data-enable-in-advanced>
               <label for="samplingCheckbox" class="ml-1 mb-0">Sample with temperature:</label>
