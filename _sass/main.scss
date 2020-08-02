@@ -122,6 +122,10 @@ main {
   }
 }
 
+.icon-sm {
+  font-size: 85%;
+}
+
 .cursor-progress, .cursor-progress * {
   cursor: progress;
 }
@@ -134,6 +138,19 @@ main {
   }
 
   margin-bottom: 10px;
+}
+
+table.preset-table{
+  margin-bottom: 0;
+
+  th {
+    padding-top: 0;
+  }
+
+  td {
+    vertical-align: middle;
+    padding: 0.5rem;
+  }
 }
 
 
