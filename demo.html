@@ -60,27 +60,27 @@ entry: demo
     <p data-show-in-advanced>We recommend listening through headphones. If you experience glitches during playback, try refreshing the page, opening it with a recent version of Google Chrome, or saving the MIDI file and playing it locally.</p>
 
     <div class="section" data-sequence-id="content">
-      <h2 id="conent-input">Content input</h2>
+      <h2 id="conent-input">Content input<span data-hide-in-advanced>: <code class="input-filename"></code></span></h2>
       <p data-show-in-advanced>Pick a song to cover. The song needs to be in 4/4, so don't pick a waltz!
          <span class='after-content-loaded'>You can choose a specific section of the song by specifying the start and end time in beats below. Please make sure that it starts on a downbeat.</span></p>
-      <div class="row" style="clear: both">
+      <div class="row" style="clear: both" data-show-in-advanced>
         <div class="input-group col-md-4 col-lg-6 mb-1 mb-md-0">
           <div class="custom-file">
-             <input id="contentFile" name="contentFile" type="file" class="custom-file-input midi-input" disabled data-enable-in-advanced>
-             <label for="contentFile" class="custom-file-label text-truncate">Choose MIDI file&hellip;</label>
+            <input id="contentFile" name="contentFile" type="file" class="custom-file-input midi-input">
+             <label for="contentFile" class="custom-file-label input-filename text-truncate">Choose MIDI file&hellip;</label>
           </div>
         </div>
         <div class="input-group col-sm-6 col-md-4 col-lg-3 mb-1 mb-sm-0 after-content-loaded">
           <div class="input-group-prepend">
             <label for="contentStartTime" class="input-group-text">Start beat</label>
           </div>
-          <input type="number" class="form-control start-time" id="contentStartTime" name="contentStartTime" value="0" min="0" step="1" disabled data-enable-in-advanced>
+          <input type="number" class="form-control start-time" id="contentStartTime" name="contentStartTime" value="0" min="0" step="1">
         </div>
         <div class="input-group col-sm-6 col-md-4 col-lg-3 after-content-loaded">
           <div class="input-group-prepend">
             <label for="contentEndTime" class="input-group-text">End beat</label>
           </div>
-          <input type="number" class="form-control end-time" id="contentEndTime" name="contentEndTime" min="0" step="1" disabled data-enable-in-advanced>
+          <input type="number" class="form-control end-time" id="contentEndTime" name="contentEndTime" min="0" step="1">
         </div>
       </div>
       <div class="card visualizer-card mt-2 after-content-loaded">
@@ -116,26 +116,26 @@ entry: demo
       </div>
     </div>
     <div class="section after-content-loaded" data-sequence-id="style">
-      <h2>Style input</h2>
+      <h2>Style input<span data-hide-in-advanced>: <code class="input-filename"></code></span></h2>
       <p data-show-in-advanced>This is the song to take the style from. For best results, pick an 8-bar (32-beat) section.</p>
-      <div class="row">
+      <div class="row" data-show-in-advanced>
         <div class="input-group col-md-4 col-lg-6 mb-1 mb-md-0">
           <div class="custom-file">
-             <input id="styleFile" name="styleFile" type="file" class="custom-file-input midi-input" disabled data-enable-in-advanced>
-             <label for="styleFile" class="custom-file-label text-truncate">Choose MIDI file...</label>
+             <input id="styleFile" name="styleFile" type="file" class="custom-file-input midi-input">
+             <label for="styleFile" class="custom-file-label input-filename text-truncate">Choose MIDI file&hellip;</label>
           </div>
         </div>
         <div class="input-group col-sm-6 col-md-4 col-lg-3 mb-1 mb-sm-0 after-style-loaded">
           <div class="input-group-prepend">
             <label for="styleStartTime" class="input-group-text">Start beat</label>
           </div>
-          <input type="number" class="form-control start-time" id="styleStartTime" name="styleStartTime" value="0" min="0" step="1" disabled data-enable-in-advanced>
+          <input type="number" class="form-control start-time" id="styleStartTime" name="styleStartTime" value="0" min="0" step="1">
         </div>
         <div class="input-group col-sm-6 col-md-4 col-lg-3 after-style-loaded">
           <div class="input-group-prepend">
             <label for="styleEndTime" class="input-group-text">End beat</label>
           </div>
-          <input type="number" class="form-control end-time" id="styleEndTime" name="styleEndTime" min="0" step="1" disabled data-enable-in-advanced>
+          <input type="number" class="form-control end-time" id="styleEndTime" name="styleEndTime" min="0" step="1">
         </div>
       </div>
       <div class="card visualizer-card mt-2 after-style-loaded">

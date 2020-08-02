@@ -105,7 +105,7 @@ $('input.midi-input').on('change', function() {
   const section = $(el).closest('[data-sequence-id]');
 
   setControlsEnabled(section, false);
-  $(el).siblings('.custom-file-label').text(el.files[0].name);
+  section.find('.input-filename').text(el.files[0].name);
 
   mm.blobToNoteSequence(file).then(function(seq) {
     seq.filename = file.name;
@@ -514,7 +514,7 @@ export function loadPreset(preset: {[k: string]: any}, staticMode = false) {
     updateSequence(seqId, data[seqId].sequence);
 
     // Also set filenames
-    $(data[seqId].section).find('.custom-file label').text(data[seqId].sequence.filename);
+    $(data[seqId].section).find('.input-filename').text(data[seqId].sequence.filename);
 
     showMore('.after-' + seqId + '-loaded');
   }
