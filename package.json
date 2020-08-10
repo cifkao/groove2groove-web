@@ -7,7 +7,8 @@
     "build": "webpack -p --progress --config webpack.prod.js && JEKYLL_ENV=production bundle exec jekyll build",
     "dev-build": "webpack --progress -d --config webpack.dev.js && bundle exec jekyll build",
     "serve": "http-server --port 4000 _site/",
-    "dev-serve": "webpack --config webpack.dev.js --watch & bundle exec jekyll build --watch & live-server --host=`hostname --fqdn` --port=4000 _site"
+    "dev-serve": "webpack --config webpack.dev.js --watch & bundle exec jekyll build --watch & live-server --host=`hostname --fqdn` --port=4000 _site",
+    "deploy": "./deploy.sh"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
@@ -39,7 +40,7 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
-    "@magenta/music": "^1.14.0",
+    "@magenta/music": "^1.19.0",
     "@tonejs/midi": "^2.0.23",
     "bootstrap": "^4.4.1",
     "bootstrap4-toggle": "^3.6.1",
