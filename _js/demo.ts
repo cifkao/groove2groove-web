@@ -63,6 +63,7 @@ $('.section[data-sequence-id]').each(function() {
 
 $('form').submit(function(e){ e.preventDefault(); });
 
+setEnabled($('[disabled]'), false);  // set the disabled counter to 1
 $('[data-show-in-advanced], .after-content-loaded, .after-style-loaded, .after-output-loaded').hide();
 $(data['content'].section).hide();
 $('#pageLoadingIndicator').hide();
@@ -80,7 +81,7 @@ $('button[data-preset-url]').click(function(event) {
 
 $('#advancedModeToggle').change(function() {
   const checked = $(this).prop('checked');
-  $('[data-enable-in-advanced]').prop('disabled', !checked);
+  setEnabled($('[data-enable-in-advanced]'), checked);
   if (checked) {
     $('[data-show-in-advanced]').show();
     $('[data-hide-in-advanced]').hide();
@@ -104,7 +105,7 @@ $('input.midi-input').on('change', function() {
 
   const section = $(el).closest('[data-sequence-id]');
 
-  setControlsEnabled(section, false);
+  setSectionEnabled(section, false);
   section.find('.input-filename').text(el.files[0].name);
 
   mm.blobToNoteSequence(file).then(function(seq) {
@@ -114,7 +115,7 @@ $('input.midi-input').on('change', function() {
     initTrimControls(section);
 
     showMore('.after-' + getSeqId(section) + '-loaded');
-  }).catch(handleError).finally(() => setControlsEnabled(section, true));
+  }).catch(handleError).finally(() => setSectionEnabled(section, true));
 });
 
 $('.start-time, .end-time').on('change', handleSequenceEdit);
@@ -155,7 +156,7 @@ $('.play-button').on('click', function() {
     section.find('.visualizer-container').scrollLeft(0);
     section.find('.seek-slider').prop('max', data[seqId].sequence.totalTime).val(0);
     showWaiting(section, true);
-    setControlsEnabled(section, false);
+    setSectionEnabled(section, false);
     data[seqId].player.loadSamples(data[seqId].sequence)
       .then(() => {
         // Change button icon and text
@@ -164,7 +165,7 @@ $('.play-button').on('click', function() {
         $(this).prop('title', 'Stop');
 
         // Enable bottom controls
-        section.find('.card-footer button, .card-footer input').prop('disabled', false);
+        setEnabled(section.find('.card-footer button, .card-footer input'), true);
 
         // Start playback. Allow the UI to update first to avoid a playback glitch
         setTimeout(() => { data[seqId].player.start(data[seqId].sequence); }, 20);
@@ -201,10 +202,10 @@ $('.generate-button').on('click', function() {
   formData.append('sample', $('#samplingCheckbox').is(':checked').toString());
   formData.append('softmax_temperature', $('#samplingTemperature').val().toString());
 
-  setControlsEnabled(section, false);
+  setSectionEnabled(section, false);
   showWaiting(section, true);
   const remixSection = $('.section[data-sequence-id="remix"]');
-  setControlsEnabled(remixSection, false);
+  setSectionEnabled(remixSection, false);
   showWaiting(remixSection, true);
 
   fetch(config.apiUrl + '/api/v1/style_transfer/' + $('#modelName').val() + '/',
@@ -226,9 +227,9 @@ $('.generate-button').on('click', function() {
     })
     .catch(handleError)
     .finally(() => {
-      setControlsEnabled(section, true);
+      setSectionEnabled(section, true);
       showWaiting(section, false);
-      setControlsEnabled(remixSection, true);
+      setSectionEnabled(remixSection, true);
       showWaiting(remixSection, false);
     });
 });
@@ -402,10 +403,8 @@ function updateSequence(seqId: SequenceId, seq: INoteSequence) {
   initVisualizer(seqId);
 }
 
-function setControlsEnabled(section: JQuery, enabled: boolean) {
-  section.find('input, button, select')
-         .filter((_, e) => $(e).data('no-enable') === undefined)
-         .prop('disabled', !enabled);
+function setSectionEnabled(section: JQuery, enabled: boolean) {
+  setEnabled(section.find('input, button, select'), enabled);
 }
 
 function handlePlaybackStop(seqId: SequenceId) {
@@ -416,7 +415,7 @@ function handlePlaybackStop(seqId: SequenceId) {
   button.find('.text').text('Play');
   button.prop('title', 'Play');
 
-  setControlsEnabled(section, true);
+  setSectionEnabled(section, true);
   section.find('.seek-slider').prop('disabled', true);
 }
 
@@ -579,15 +578,30 @@ function handleError(error: any) {
   }
 }
 
-function showWaiting(element: JQuery, waiting = true) {
-  if (waiting) {
-    element.data('in-progress', (element.data('in-progress') || 0) + 1);
-    element.addClass('cursor-progress');
-  } else {
-    element.data('in-progress', (element.data('in-progress') || 1) - 1);
-    if (!element.data('in-progress')) {
-      element.removeClass('cursor-progress');
+function setEnabled(controls: JQuery, enabled: boolean) {
+  controls.each((_, element) => {
+    $(element).prop('disabled', counterAttr(element, 'disabled', !enabled));
+  });
+}
+
+function showWaiting(elements: JQuery, waiting: boolean) {
+  elements.each((_, element) => {
+    if (counterAttr(element, 'in-progress', waiting)) {
+      $(element).addClass('cursor-progress');
+    } else {
+      $(element).removeClass('cursor-progress');
     }
+  });
+}
+
+function counterAttr(element: HTMLElement, name: string, increment = true) {
+  const e = $(element);
+  if (increment) {
+    e.data(name, (e.data(name) || 0) + 1);
+    return true;
+  } else {
+    e.data(name, (e.data(name) || 1) - 1);
+    return e.data(name) > 0;
   }
 }
 
