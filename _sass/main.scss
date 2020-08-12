@@ -127,7 +127,7 @@ main {
 }
 
 .cursor-progress, .cursor-progress * {
-  cursor: progress;
+  cursor: progress !important;
 }
 
 .card.floating-card {
@@ -185,15 +185,15 @@ label[data-instrument] {
 }
 
 svg {
-  rect[data-instrument] {
+  rect.note {
     opacity: calc(min(1, (var(--midi-velocity) + 20) / 128) * 0.75);
-  }
 
-  rect[data-instrument].active {
-    opacity: calc(min(1, (var(--midi-velocity) + 30) / 128) * 0.9);
-    stroke: black;
-    stroke-width: 0.75;
-    stroke-opacity: 0.5;
+    &.active {
+      opacity: calc(min(1, (var(--midi-velocity) + 30) / 128) * 0.9);
+      stroke: black;
+      stroke-width: 0.75;
+      stroke-opacity: 0.5;
+    }
   }
 }
 
@@ -202,7 +202,7 @@ svg {
   label[data-instrument="#{$i}"] {
     border-bottom-color: $color;
   }
-  svg rect[data-instrument="#{$i}"] {
+  svg rect.note[data-instrument="#{$i}"] {
     fill: $color;
   }
 }
