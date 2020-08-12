@@ -154,9 +154,8 @@ $('.play-button').on('click', function() {
 
     section.find('.visualizer-container').scrollLeft(0);
     section.find('.seek-slider').prop('max', data[seqId].sequence.totalTime).val(0);
-    $('#loadingModal .loading-text').text('Loading sounds…');
-    $('#loadingModal').modal('show');
-    showWaiting($('html'), true);
+    showWaiting(section, true);
+    setControlsEnabled(section, false);
     data[seqId].player.loadSamples(data[seqId].sequence)
       .then(() => {
         // Change button icon and text
@@ -164,15 +163,13 @@ $('.play-button').on('click', function() {
         $(this).find('.text').text('Stop');
         $(this).prop('title', 'Stop');
 
-        // Disable everything except for bottom controls
-        setControlsEnabled(section, false);
+        // Enable bottom controls
         section.find('.card-footer button, .card-footer input').prop('disabled', false);
 
-        // Start playback
-        data[seqId].player.start(data[seqId].sequence);
+        // Start playback. Allow the UI to update first to avoid a playback glitch
+        setTimeout(() => { data[seqId].player.start(data[seqId].sequence); }, 20);
       }).catch(handleError).finally(() => {
-        $('#loadingModal').modal('hide');
-        showWaiting($('html'), false);
+        showWaiting(section, false);
       });
   }
 });
@@ -337,7 +334,7 @@ function handleSequenceEdit(this: HTMLElement) {
   const section = control.closest('[data-sequence-id]');
   const seqId = getSeqId(section);
 
-  showWaiting($('html'), true);
+  showWaiting(section, true);
   delay().then(() => {
     var seq = data[seqId].fullSequence;
     if (seq) {
@@ -366,7 +363,7 @@ function handleSequenceEdit(this: HTMLElement) {
     if (control.hasClass('start-time')) {
       section.find('.visualizer-container').scrollLeft(0);
     }
-  }).finally(() => showWaiting($('html'), false));
+  }).finally(() => showWaiting(section, false));
 }
 
 function initRemix(staticMode?: boolean) {
@@ -526,7 +523,7 @@ export function loadPresetFromUrl(url: string, contentName?: string, styleName?:
 
   $('#loadingModal .loading-text').text('Loading…');
   $('#loadingModal').modal('show');
-  $('html').addClass('cursor-progress');
+  showWaiting($('body'), true);
 
   fetch(url)
     .then(ensureResponseOk, () => Promise.reject('Connection error'))
@@ -543,7 +540,7 @@ export function loadPresetFromUrl(url: string, contentName?: string, styleName?:
       $('.section[data-sequence-id="content"]')[0].scrollIntoView();
     }).catch(handleError).finally(() => {
       $('#loadingModal').modal('hide');
-      $('html').removeClass('cursor-progress');
+      showWaiting($('body'), false);
     });
 }
 
