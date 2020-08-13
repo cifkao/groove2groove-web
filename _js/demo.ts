@@ -166,6 +166,7 @@ $('.play-button').on('click', function() {
 
         // Enable bottom controls
         setEnabled(section.find('.card-footer button, .card-footer input'), true);
+        setEnabled(section.find('.seek-slider'), true);
 
         // Start playback. Allow the UI to update first to avoid a playback glitch
         setTimeout(() => { data[seqId].player.start(data[seqId].sequence); }, 20);
@@ -416,7 +417,7 @@ function handlePlaybackStop(seqId: SequenceId) {
   button.prop('title', 'Play');
 
   setSectionEnabled(section, true);
-  section.find('.seek-slider').prop('disabled', true);
+  setEnabled(section.find('.seek-slider'), false);
 }
 
 export function stopAllPlayers() {
