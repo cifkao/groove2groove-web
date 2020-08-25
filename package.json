@@ -46,6 +46,7 @@
     "bootstrap4-toggle": "^3.6.1",
     "core-js": "^3.6.4",
     "file-saver": "^2.0.2",
+    "http-status-codes": "^2.1.2",
     "jquery": "^3.4.1",
     "open-iconic": "^1.1.1",
     "popper.js": "^1.16.1",

@@ -4,6 +4,7 @@ import {saveAs} from 'file-saver';
 import * as mm from '@magenta/music/es6/core';
 import {NoteSequence, INoteSequence} from '@magenta/music/es6/protobuf';
 import {instrumentByPatchID} from '@tonejs/midi/dist/InstrumentMaps';
+import {getReasonPhrase} from 'http-status-codes';
 import * as ns_util from './ns_util';
 
 
@@ -23,20 +24,55 @@ const INSTRUMENT_NAMES = instrumentByPatchID.map(
     .replace(/\b\w/g, (m) => m.toUpperCase())
     .replace(/\(.*\)/, (m) => m.toLowerCase()));
 
+const AMADEUS_GIF = '<video width="640" height="340" autoplay loop muted playsinline poster="https://j.gifs.com/71Zzm8.jpg" class="modal-meme">' +
+                    '<source src="https://j.gifs.com/71Zzm8.mp4" type="video/mp4">' +
+                    '</video>';
+
 interface ErrorMessage {
   title: string;
-  message: string;
+  body: string;
 }
 const ERROR_MESSAGES = {
-  'STYLE_INPUT_TOO_LONG': {
-    title: 'Input too long',
-    message: 'The given style input is too long. Please use the ‘Start bar’ and ‘End bar’ fields to select an 8-bar (32-beat) section.'
+  'CONTENT_INPUT_TOO_LONG': {
+    title: 'Content input too long',
+    body: 'Your <strong>content input</strong> is too long. Please use the ‘Start beat’ and ‘End beat’ fields to reduce its length.' +
+          AMADEUS_GIF
   },
-  'RATE_LIMIT_EXCEEDED': {
+  'STYLE_INPUT_TOO_LONG': {
+    title: 'Style input too long',
+    body: 'Your <strong>style input</strong> is too long. Please use the ‘Start beat’ and ‘End beat’ fields to select an 8-bar (32-beat) section.' +
+          AMADEUS_GIF
+  },
+  'CONTENT_INPUT_TOO_MANY_NOTES': {
+    title: 'Too many notes',
+    body: 'Your <strong>content input</strong> contains too many notes for us to process. Try reducing its length or deselecting some instruments.' +
+          AMADEUS_GIF
+  },
+  'STYLE_INPUT_TOO_MANY_NOTES': {
+    title: 'Too many notes',
+    body: 'Your <strong>style input</strong> contains too many notes for us to process. Try deselecting some instruments.' +
+          AMADEUS_GIF
+  },
+  'STYLE_INPUT_TOO_MANY_INSTRUMENTS': {
+    title: 'Too many instruments',
+    body: 'The <strong>style input</strong> contains too many instruments. Please deselect some of them.' +
+          AMADEUS_GIF
+  },
+  'MODEL_TIMEOUT': {
+    title: 'Timed out',
+    body: 'The model took too long to process your input. Try again later or with a different input.'
+  },
+  413: /* Request Entity Too Large */ {
+    title: 'Input too large',
+    body: 'Your inputs are too large for us to process. Please try reducing their length using the ' +
+          '‘Start beat’ and ‘End beat’ fields or deselecting some instruments.' +
+          AMADEUS_GIF
+  },
+  429: /* Too Many Requests */ {
     title: 'Too many requests',
-    message: 'You have reached your limit. Please try again in a moment.'
-  }
-} as Record<string, ErrorMessage>;
+    body: 'You have reached your limit. Please try again in a moment.'
+  },
+} as Record<string | number, ErrorMessage>;
 
 interface SequenceData {
   sequence?: INoteSequence;
@@ -547,10 +583,13 @@ export function loadPresetFromUrl(url: string, contentName?: string, styleName?:
 function ensureResponseOk(response: Response) {
   if (!response.ok) {
     const contentType = response.headers.get('Content-Type');
-    if (contentType && contentType.startsWith('text/plain')) {
-      return response.text().then((text) => Promise.reject(text));
+    if (contentType && contentType.startsWith('application/json')) {
+      return response.json().then((json) => {
+        json.headers = response.headers;
+        return Promise.reject(json);
+      });
     } else {
-      return Promise.reject(response.statusText);
+      return Promise.reject(getReasonPhrase(response.status));
     }
   }
   return response;
@@ -558,21 +597,21 @@ function ensureResponseOk(response: Response) {
 
 function handleError(error: any) {
   try {
-    var text = '';
+    let text = 'Unknown error', code = null;
     if (error) {
-      if (typeof error.text === 'function') {
+      if (error.error) {
+        text = error.error;
+        code = error.code;
+      } else if (typeof error.text === 'function') {
         text = error.text();
       } else {
         text = error.toString();
       }
     }
-    var message = text, title = 'Error';
-    if (ERROR_MESSAGES[text]) {
-      message = ERROR_MESSAGES[text].message;
-      title = ERROR_MESSAGES[text].title;
-    }
-    $('#errorModal .modal-title').text('\u26a0 ' + title);
-    $('#errorModal .error-text').text(message);
+    let message = {body: text, title: 'Error'};
+    message = ERROR_MESSAGES[text] || ERROR_MESSAGES[code] || message;
+    $('#errorModal .modal-title').html('\u26a0 ' + message.title);
+    $('#errorModal .error-text').html(message.body);
     $('#errorModal').modal('show');
   } finally {
     throw error;

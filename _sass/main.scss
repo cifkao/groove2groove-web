@@ -153,8 +153,25 @@ table.preset-table{
   }
 }
 
+#presetModal table.table thead th {
+  border-top: none;
+}
 
-$instrument-colors: $blue, $indigo, $pink, $red, $orange, $yellow, $green, $teal, $cyan;
+.modal-meme {
+  display: block;
+  max-width: 100%;
+  max-height: 40vh;
+  width: auto;
+  height: auto;
+  margin: 1rem auto;
+
+  @include media-breakpoint-between(sm, lg) {
+    max-width: 85%;
+  }
+}
+
+
+$instrument-colors: $blue, $red, $teal, $indigo, $yellow, $pink, $cyan, $orange, $green;
 
 
 .section {
@@ -205,8 +222,4 @@ svg {
   svg rect.note[data-instrument="#{$i}"] {
     fill: $color;
   }
-}
-
-#presetModal table.table thead th {
-  border-top: none;
 }
