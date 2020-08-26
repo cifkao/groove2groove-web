@@ -29,25 +29,34 @@ entry: demo
       </div>
     </div>
 
-    <div data-hide-in-advanced>
-      <p>Click <strong>Load example</strong> below and pick one of the available examples.</p>
-      <p>For each example, you will see first the two inputs (<strong>content</strong> and <strong>style</strong>), then the <strong>generated accompaniment</strong>, and finally a <strong>remix</strong> of the accompaniment with the original melody.
-         You can play or save each file, choosing the tracks that you want to include.
-         In some cases, we have muted some of the tracks to reduce clutter, but you can unmute them by checking the corresponding boxes.</p>
-      <p>We recommend listening through headphones. If you experience glitches during playback, try refreshing the page, opening it with a recent version of Google Chrome, or saving the MIDI file and playing it locally.</p>
-    </div>
+    <div class="d-flex clearfix">
+      <div>
+        <div data-hide-in-advanced>
+          <p>Click the button below and pick one of the available examples.</p>
+        </div>
 
-    <p data-show-in-advanced>Either pick one of the pre-generated examples, or upload your own content &amp; style input by clicking <strong>Browse</strong> below. Bear in mind that some files work better than others due to possible mistakes in metadata or other inconsistencies common in MIDI files found in the wild.</p>
+        <p data-show-in-advanced>Either pick one of the pre-generated examples, or <strong>upload your own content &amp; style input</strong> by clicking <strong>Browse</strong> below.</p>
 
-    <div class="row mt-1 mb-3">
-      <div class="col-lg-4 col-sm-2"></div>
-      <div class="col-lg-4 col-sm-8">
-        <button type="button" id="presetsButton" class="btn btn-block btn-primary"><span class="oi oi-spreadsheet" aria-hidden="true"></span> Load example&hellip;</button>
+        <button type="button" id="presetsButton" class="btn btn-primary d-block mx-auto mb-3">
+          <span class="px-4"><span class="oi oi-spreadsheet" aria-hidden="true"></span> Load example&hellip;</span>
+        </button>
+
+        <div data-hide-in-advanced>
+          <p>For each example, you will see first the two inputs (<strong>content</strong> and <strong>style</strong>), then the <strong>generated accompaniment</strong>, and finally a <strong>remix</strong> of the accompaniment with the original melody.
+             You can play or save each file, choosing the tracks that you want to include.
+             In some cases, we have muted some of the tracks to reduce clutter, but you can unmute them by checking the corresponding boxes.</p>
+        </div>
+
+        <p>We recommend listening through headphones. If you experience glitches during playback, try refreshing the page, opening it in a different browser, or saving the MIDI file and playing it locally.</p>
+
+        <div class="alert alert-warning" data-show-in-advanced>
+           <strong>Heads up!</strong> The models are running on our server, so we have put some limits in place to prevent overloading it.
+           Also bear in mind that some files work better than others.
+           Some inputs may make the model go haywire, cause playback glitches, or crash your browser.
+           If you run into problems, just try a different input.
+        </div>
       </div>
-      <div class="col-lg-4 col-sm-2"></div>
     </div>
-
-    <p data-show-in-advanced>We recommend listening through headphones. If you experience glitches during playback, try refreshing the page, opening it with a recent version of Google Chrome, or saving the MIDI file and playing it locally.</p>
 
     <div class="section" data-sequence-id="content">
       <h2 id="conent-input">Content input<span data-hide-in-advanced>: <code class="input-filename"></code></span></h2>
