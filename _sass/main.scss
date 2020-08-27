@@ -120,6 +120,36 @@ main {
   h1 {
     margin-bottom: 1.5rem;
   }
+
+  h2, h3, h4 {
+    .badges {
+      font-size: 0.85 * $h3-font-size;
+      flex-wrap: wrap;
+      $badge-margin-h: 0.2rem;
+      margin: 0 (-$badge-margin-h);
+      margin-top: 0.3rem;
+
+      @include media-breakpoint-down(sm) {
+        display: inline-flex;
+        margin-left: 0.5rem;
+      }
+
+      @include media-breakpoint-up(md) {
+        display: flex;
+      }
+
+      .badge {
+        @include badge-variant($gray-300);
+
+        margin: 0.1rem $badge-margin-h;
+
+        .oi {
+          font-size: 70%;
+          margin-right: 0.25rem;
+        }
+      }
+    }
+  }
 }
 
 .icon-sm {
@@ -128,6 +158,12 @@ main {
 
 .cursor-progress, .cursor-progress * {
   cursor: progress !important;
+}
+
+blockquote {
+  padding: 0 1em;
+  color: $gray-600;
+  border-left: .25em solid $gray-400;
 }
 
 .card.floating-card {

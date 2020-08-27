@@ -33,24 +33,39 @@ title: Groove2Groove – One-shot music style transfer
 <main>
   <div class="container">
     <div class="row pt-2 pb-2">
-      <div class="col-md-3 d-md-block d-none mb-3">
-      </div>
-      <div class="col-md-9 col-12" markdown="1">
+      <div class="lead col-12" markdown="1">
 **Groove2Groove** (Grv2Grv) is an AI system for music accompaniment style transfer.
-Given two MIDI files – a **content input** and a **style input** – it can generate a new accompaniment
+Given two MIDI files – a **content input** and a **style input** – it generates a new accompaniment
 for the first file in the style of the second one.
 </div>
     </div>
   </div>
 
   <div class="container">
-    <div class="row pt-4 pb-2">
+    <div class="row pt-4 pb-1">
       <div class="col-md-3 col-12 mb-3">
-        <h3 id="Paper" class="anchor">Paper &amp; additional resources</h3>
+        <h3 id="Paper" class="anchor">Paper<span class="badges">
+          <a href="#" target="blank" class="badge"><span class="oi oi-document" aria-hidden="true"></span>PDF</a>
+          <a href="https://doi.org/10.1109/TASLP.2020.3019642" target="blank" class="badge"><span class="oi oi-double-quote-serif-right" aria-hidden="true"></span>DOI</a>
+        </span></h3>
+      </div>
+      <div class="col-md-9 col-12">
+        <p>The system is described in our paper:</p>
+        <blockquote>
+          <p class="mb-0">
+            <a href="https://ondrej.cifka.com" target="_blank">O. Cífka</a>, <a href="https://perso.telecom-paristech.fr/simsekli/" target="_blank">U. Şimşekli</a> and <a href="https://perso.telecom-paristech.fr/grichard/" target="_blank">G. Richard</a>, "Groove2Groove: One-Shot Music Style Transfer with Supervision from Synthetic Data," in <em>IEEE/ACM Transactions on Audio, Speech, and Language Processing</em>, doi: <a href="https://doi.org/10.1109/TASLP.2020.3019642" target="_blank">10.1109/TASLP.2020.3019642</a>.
+          </p>
+        </blockquote>
+      </div>
+    </div>
+    <div class="row pb-2">
+      <div class="col-md-3 col-12 mb-3">
+        <h4 id="Additional_resources" class="anchor">Additional resources<span class="badges">
+          <a href="https://github.com/cifkao/groove2groove" target="blank" class="badge"><span class="oi oi-code" aria-hidden="true"></span>Code</a>
+          <a href="#Dataset" class="badge"><span class="oi oi-data-transfer-download" aria-hidden="true"></span>Data</a>
+        </span></h4>
       </div>
       <div class="col-md-9 col-12" markdown="1">
-The system is described in the paper *Groove2Groove: One-shot music style transfer with supervision from synthetic data*.
-
 We provide the following resources to supplement the paper:
   - [Dataset](#Dataset) used for training and evaluation
   - [Source code](https://github.com/cifkao/groove2groove){:target="_blank"} of the system and the evaluation metrics
@@ -73,7 +88,7 @@ accompaniment generation software as described in the paper.
 Each chord chart is rendered in at least two different styles, providing pairs of examples for supervised training.
 
 A sample of the dataset is available [here]({{ "/data/groove2groove-data-v1.0-sample.tar.gz" | relative_url }});
-the full dataset will be released once the paper is accepted for publication.
+the full dataset will be released soon.
 If you use the dataset for your research, please cite the paper as shown above.
 
 #### MIDI files
