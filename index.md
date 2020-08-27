@@ -91,9 +91,11 @@ The accompaniments were created from chord charts using the commercial
 accompaniment generation software as described in the paper.
 Each chord chart is rendered in at least two different styles, providing pairs of examples for supervised training.
 
+{% comment %}
 A sample of the dataset is available [here]({{ "/data/groove2groove-data-v1.0-sample.tar.gz" | relative_url }});
-the full dataset will be released soon.
-If you use the dataset for your research, please <a href="#Paper">cite the paper</a>.
+if you use the dataset for your research, please <a href="#Paper">cite the paper</a>.
+{% endcomment %}
+The dataset will be released soon.
 
 #### MIDI files
 The `midi` directory contains one subdirectory for each part of the dataset:
