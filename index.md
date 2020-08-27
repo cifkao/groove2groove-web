@@ -42,7 +42,7 @@ for the first file in the style of the second one.
   </div>
 
   <div class="container">
-    <div class="row pt-4 pb-1">
+    <div class="row pt-4 pb-2">
       <div class="col-md-3 col-12 mb-3">
         <h3 id="Paper" class="anchor"><span class="mr-2">Paper</span><span class="badges">
           <a href="https://hal.archives-ouvertes.fr/hal-02923548/document" target="blank" class="badge"><span class="oi oi-document" aria-hidden="true"></span>PDF</a>
@@ -58,19 +58,21 @@ for the first file in the style of the second one.
         </blockquote>
       </div>
     </div>
-    <div class="row pb-2">
+  </div>
+
+  <div class="container">
+    <div class="row pt-4 pb-2">
       <div class="col-md-3 col-12 mb-3">
-        <h4 id="Additional_resources" class="anchor"><span class="mr-2">Additional resources</span><span class="badges">
-          <a href="https://github.com/cifkao/groove2groove" target="blank" class="badge"><span class="oi oi-code" aria-hidden="true"></span>Code</a>
-          <a href="#Dataset" class="badge"><span class="oi oi-data-transfer-download" aria-hidden="true"></span>Data</a>
-        </span></h4>
+        <h3 id="Additional_resources" class="anchor"><span class="mr-2">Additional resources</span><span class="badges">
+          <a href="https://github.com/cifkao/groove2groove" target="blank" class="badge"><span class="oi oi-code" aria-hidden="true"></span>GitHub</a>
+        </span></h3>
       </div>
       <div class="col-md-9 col-12" markdown="1">
 We provide the following resources to supplement the paper:
-  - [Dataset](#Dataset) used for training and evaluation
   - [Source code](https://github.com/cifkao/groove2groove){:target="_blank"} of the system and the evaluation metrics
-  - [Configuration files](#) with hyperparameter settings
+  - [Configuration files](https://github.com/cifkao/groove2groove){:target="_blank"} with hyperparameter settings
   - [Style interpolation (blending) examples]({{ "/style-interpolation.html" | relative_url }})
+  - [Dataset](#Dataset) used for training and evaluation
 </div>
     </div>
   </div>
@@ -78,7 +80,9 @@ We provide the following resources to supplement the paper:
   <div class="container">
     <div class="row pt-4 pb-2">
       <div class="col-md-3 col-12 mb-3">
-        <h3 id="Dataset" class="anchor">Dataset</h3>
+        <h3 id="Dataset" class="anchor"><span class="mr-2">Dataset</span><span class="badges">
+          <span class="badge">Coming soon</span>
+        </span></h3>
       </div>
       <div class="col-md-9 col-12" markdown="1">
 The *Groove2Groove Dataset* is a parallel corpus of synthetic MIDI accompaniments in almost 3,000 different styles.
