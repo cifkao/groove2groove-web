@@ -27,6 +27,7 @@ const INSTRUMENT_NAMES = instrumentByPatchID.map(
 const AMADEUS_GIF = '<video width="640" height="340" autoplay loop muted playsinline poster="https://j.gifs.com/71Zzm8.jpg" class="modal-meme">' +
                     '<source src="https://j.gifs.com/71Zzm8.mp4" type="video/mp4">' +
                     '</video>';
+new Image().src = 'https://j.gifs.com/71Zzm8.jpg';  // Preload image
 
 interface ErrorMessage {
   title: string;
@@ -60,7 +61,8 @@ const ERROR_MESSAGES = {
   },
   'MODEL_TIMEOUT': {
     title: 'Timed out',
-    body: 'The model took too long to process your input. Try again later or with a different input.'
+    body: 'The model took too long to process your input. This may happen with certain inputs or when the server is overloaded. ' +
+          'Try again later or with a different input.'
   },
   413: /* Request Entity Too Large */ {
     title: 'Input too large',
