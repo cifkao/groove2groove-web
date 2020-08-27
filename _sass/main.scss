@@ -131,7 +131,6 @@ main {
 
       @include media-breakpoint-down(sm) {
         display: inline-flex;
-        margin-left: 0.5rem;
       }
 
       @include media-breakpoint-up(md) {

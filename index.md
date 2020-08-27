@@ -44,7 +44,7 @@ for the first file in the style of the second one.
   <div class="container">
     <div class="row pt-4 pb-1">
       <div class="col-md-3 col-12 mb-3">
-        <h3 id="Paper" class="anchor">Paper<span class="badges">
+        <h3 id="Paper" class="anchor"><span class="mr-2">Paper</span><span class="badges">
           <a href="https://hal.archives-ouvertes.fr/hal-02923548/document" target="blank" class="badge"><span class="oi oi-document" aria-hidden="true"></span>PDF</a>
           <a href="https://doi.org/10.1109/TASLP.2020.3019642" target="blank" class="badge"><span class="oi oi-double-quote-serif-right" aria-hidden="true"></span>DOI</a>
         </span></h3>
@@ -60,7 +60,7 @@ for the first file in the style of the second one.
     </div>
     <div class="row pb-2">
       <div class="col-md-3 col-12 mb-3">
-        <h4 id="Additional_resources" class="anchor">Additional resources<span class="badges">
+        <h4 id="Additional_resources" class="anchor"><span class="mr-2">Additional resources</span><span class="badges">
           <a href="https://github.com/cifkao/groove2groove" target="blank" class="badge"><span class="oi oi-code" aria-hidden="true"></span>Code</a>
           <a href="#Dataset" class="badge"><span class="oi oi-data-transfer-download" aria-hidden="true"></span>Data</a>
         </span></h4>
