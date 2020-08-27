@@ -18,3 +18,16 @@
 <link rel="apple-touch-icon-precomposed" sizes="152x152" href="https://www.telecom-paris.fr/wp-content-EvDsK19/themes/telecom-paristech/assets/images/apple-icon152x152.png">
 <link rel="apple-touch-icon-precomposed" sizes="180x180" href="https://www.telecom-paris.fr/wp-content-EvDsK19/themes/telecom-paristech/assets/images/apple-icon180x180.png">
 <link rel="shortcut icon" href="https://www.telecom-paris.fr/favicon.ico" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="{{ site.title | escape }}" />
+<meta property="og:image" content="{{ "/assets/img/og-image.png" | absolute_url }}" />
+<meta property="og:site_name" content="{{ site.title | escape }}" />
+<meta property="og:url" content="{{ site.url }}" />
+<meta property="og:description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}" />
+
+<meta name="twitter:image:src" content="{{ "/assets/img/og-image.png" | absolute_url }}" />
+<meta name="twitter:creator" content="@cifkao" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{ site.title | escape }}" />
+<meta name="twitter:description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}" />

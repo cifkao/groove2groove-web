@@ -1,6 +1,7 @@
 url: "https://groove2groove.telecom-paris.fr"
 baseurl: "/"
 title: "Groove2Groove"
+description: "One-shot style transfer for music accompaniments"
 
 defaults:
   - scope:
