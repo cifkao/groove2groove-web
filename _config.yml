@@ -2,6 +2,19 @@ url: "https://groove2groove.telecom-paris.fr"
 baseurl: "/"
 title: "Groove2Groove"
 description: "One-shot style transfer for music accompaniments"
+keywords:
+  - grv2grv
+  - style transfer
+  - music style
+  - midi
+  - accompaniment
+  - band in a box
+  - bandinabox
+  - dataset
+  - artificial intelligence
+  - machine learning
+  - neural network
+  - taslp
 
 defaults:
   - scope:

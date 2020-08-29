@@ -8,6 +8,7 @@
   {% else %}{{ site.title | escape }}{% endif %}
 </title>
 <meta name="description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}">
+<meta name="keywords" content="{% for keyword in site.keywords %}{{ keyword | escape }}{% unless  forloop.last %}, {% endunless %}{% endfor %}">
 
 <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" integrity="sha512-UyNhw5RNpQaCai2EdC+Js0QL4RlVmiq41DkmCJsRV3ZxipG2L0HhTqIf/H9Hp8ez2EnFlkBnjRGJU2stW3Lj+w==" crossorigin="anonymous">
