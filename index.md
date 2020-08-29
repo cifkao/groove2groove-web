@@ -85,7 +85,7 @@ We provide the following resources to supplement the paper:
         </span></h3>
       </div>
       <div class="col-md-9 col-12" markdown="1">
-The *Groove2Groove Dataset* is a parallel corpus of synthetic MIDI accompaniments in almost 3,000 different styles.
+The *Groove2Groove MIDI Dataset* is a parallel corpus of synthetic MIDI accompaniments in almost 3,000 different styles.
 The accompaniments were created from chord charts using the commercial
 [Band-in-a-Box](https://www.pgmusic.com){:target="_blank"}
 accompaniment generation software as described in the paper.
@@ -100,7 +100,9 @@ The dataset will be released soon.
 #### MIDI files
 The `midi` directory contains one subdirectory for each part of the dataset:
 - `train` contains 5744 MIDI files in 2872 styles (exactly 2 files per style). Each file contains
-  252 measures (the Band-in-a-Box maximum) following a 2 measure count-in.
+  252 measures (the Band-in-a-Box maximum) following a 2 measure count-in. (Note that 11 of these
+  files are empty due to technical difficulties and are only included in the `raw` version of the
+  data.)
 - `val` and `test` each contain 1200 files in 40 styles (exactly 30 files per style, 16 bars per
   file after the count-in). The sets of styles are disjoint from each other and from those in
   `train`.
@@ -119,10 +121,12 @@ file lists the chord chart filenames along with the styles and substyles applied
 chart.
 
 #### Chord charts
-The `charts/abc` and `charts/mgu` directories contain the corresponding chord charts in the ABC and
-Band-in-a-Box (MGU) format, respectively. The MGU files are all in the default "ZZJAZZ" style. To
-enable generation in the A and B substyles, we provide each MGU file in an A and B variant where the
-entire chord chart is just one long A or B section, respectively.
+The `charts` directory is structured similarly to the `midi` directory and contains the
+corresponding chord charts. Each set of chord charts is provided in the ABC format (in the `abc`
+subdirectory) and the Band-in-a-Box (MGU) format (in the `mgu` subdirectory). The MGU files are all
+in the default "ZZJAZZ" style. To enable generation in the A and B substyles, we provide each MGU
+file in an A and B variant where the entire chord chart is just one long A or B section,
+respectively.
 
 The chord charts were generated using language models trained on the iRb corpus (see the paper
 for further details). 5/6 of the chord charts are in major keys, the other 1/6 in minor keys
