@@ -81,7 +81,7 @@ We provide the following resources to supplement the paper:
     <div class="row pt-4 pb-2">
       <div class="col-md-3 col-12 mb-3">
         <h3 id="Dataset" class="anchor"><span class="mr-2">Dataset</span><span class="badges">
-          <span class="badge">Coming soon</span>
+          <a href="http://doi.org/10.5281/zenodo.3958000" target="blank" class="badge"><span class="oi oi-cloud-download" aria-hidden="true"></span>Zenodo</a>
         </span></h3>
       </div>
       <div class="col-md-9 col-12" markdown="1">
@@ -91,11 +91,8 @@ The accompaniments were created from chord charts using the commercial
 accompaniment generation software as described in the paper.
 Each chord chart is rendered in at least two different styles, providing pairs of examples for supervised training.
 
-{% comment %}
-A sample of the dataset is available [here]({{ "/data/groove2groove-data-v1.0-sample.tar.gz" | relative_url }});
-if you use the dataset for your research, please <a href="#Paper">cite the paper</a>.
-{% endcomment %}
-The dataset will be released soon.
+The dataset is available [from Zenodo](http://doi.org/10.5281/zenodo.3958000){:target="_blank"}.
+If you use the data for your research, please <a href="#Paper">cite the paper</a>.
 
 #### MIDI files
 The `midi` directory contains one subdirectory for each part of the dataset:
