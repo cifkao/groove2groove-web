@@ -3,8 +3,8 @@ layout: default
 title: Groove2Groove – One-shot music style transfer
 ---
 
-<header style="background-image: url('{{ "/assets/img/splash-vinyls.jpg" | relative_url }}')">
-  <div class="container" style="padding: 100px 15px 70px 15px">
+<header class="tall" style="background-image: url('{{ "/assets/img/splash-vinyls.jpg" | relative_url }}')">
+  <div class="container">
     <h1><a href="#">Groove2Groove</a></h1>
     <div class="subheading">
       One-shot style transfer for music accompaniments

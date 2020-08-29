@@ -31,52 +31,63 @@ header {
     color: #fff;
     text-align: center;
     padding: 60px 15px 60px 15px;
+  }
 
-    h1, .heading {
-      font-size: 50px;
-      font-weight: 300;
-      letter-spacing: 0.1rem;
-      margin-top: 0;
+  &.tall .container {
+    padding-top: 100px;
+    padding-bottom: 70px;
 
-      @include media-breakpoint-down(sm) {
-        font-size: 35px;
-      }
-
-      @include media-breakpoint-down(xs) {
-        font-size: 30px;
-      }
+    @include media-breakpoint-down(xs) {
+      padding-top: 75px;
+      padding-bottom: 60px;
     }
-    .subheading {
-      font-size: 24px;
-      font-weight: 300;
-      line-height: 1.1;
-      display: block;
-      margin: 10px 0 0;
+  }
 
-      @include media-breakpoint-down(sm) {
-        font-size: 20px;
-      }
+  h1, .heading {
+    font-size: 50px;
+    font-weight: 300;
+    letter-spacing: 0.03em;
+    margin-top: 0;
 
-      @include media-breakpoint-down(xs) {
-        font-size: 1rem;
-      }
-    }
-    a {
-      color: inherit;
-
-      &:hover {
-        text-decoration: none;
-      }
+    @include media-breakpoint-down(sm) {
+      font-size: 2.5rem;
     }
 
-    .btn {
-      @include media-breakpoint-up(sm) {
-        @include button-size($btn-padding-y-lg, $btn-padding-x-lg, $btn-font-size-lg, $btn-line-height-lg, $btn-border-radius-lg);
-      }
+    @include media-breakpoint-down(xs) {
+      font-size: 2.2rem;
+    }
+  }
+  .subheading {
+    font-size: 1.6rem;
+    font-weight: 300;
+    line-height: 1.1;
+    display: block;
+    margin: 10px 0 0;
 
-      @include media-breakpoint-up(xs) {
-        @include button-size($btn-padding-y-sm, $btn-padding-x-sm, $btn-font-size-sm, $btn-line-height-sm, $btn-border-radius-sm);
-      }
+    @include media-breakpoint-down(sm) {
+      font-size: 1.5rem;
+    }
+
+    @include media-breakpoint-down(xs) {
+      font-size: 1.4rem;
+    }
+  }
+  a {
+    color: inherit;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .btn {
+    @include media-breakpoint-up(sm) {
+      // Like .btn-lg
+      @include button-size($btn-padding-y-lg, $btn-padding-x-lg, $btn-font-size-lg, $btn-line-height-lg, $btn-border-radius-lg);
+    }
+
+    @media (max-width: 430px) {
+      width: 40%;
     }
   }
 }
@@ -157,6 +168,14 @@ main {
 
 .cursor-progress, .cursor-progress * {
   cursor: progress !important;
+}
+
+.lead {
+  text-align: justify;
+
+  @media (max-width: 430px) {
+    text-align: center;
+  }
 }
 
 blockquote {
