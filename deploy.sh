@@ -3,5 +3,5 @@ set -ex
 
 yarn run clean
 yarn run build
-rsync -avzH --delete --exclude .htaccess _site/* groove2groove:www/
-rsync -rvH --delete --existing --ignore-existing --exclude .htaccess _site/ groove2groove:www/
+rsync -avzH --delete _site/* _site/.htaccess groove2groove:www/
+rsync -rvH --delete --existing --ignore-existing _site/ groove2groove:www/
