@@ -116,6 +116,7 @@ The chord charts used to generate these MIDI files are described [below](#chord-
 Each set of MIDI files is provided in two versions, each in its own subdirectory:
 - `raw` – the raw output of Band-in-a-Box.
 - `fixed` – non-empty files only, fixed so that each track has the correct program number.
+
 The filenames have the form `{chart_name}.{style}_{substyle}.mid`. The `charts_styles_substyles.tsv`
 file lists the chord chart filenames along with the styles and substyles applied to each chord
 chart.
