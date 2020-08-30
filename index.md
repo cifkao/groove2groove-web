@@ -48,14 +48,24 @@ for the first file in the style of the second one.
           <a href="{{ "/data/paper.pdf" | relative_url }}" class="badge"><span class="oi oi-document" aria-hidden="true"></span>PDF</a>
           <a href="https://doi.org/10.1109/TASLP.2020.3019642" target="blank" class="badge"><span class="oi oi-double-quote-serif-right" aria-hidden="true"></span>DOI</a>
         </span></h3>
+        <div class="d-none d-md-block d-lg-none">
+          <div data-badge-popover="right" data-badge-type="donut" data-doi="10.1109/TASLP.2020.3019642" data-hide-no-mentions="true" data-condensed="true" class="altmetric-embed"></div>
+        </div>
       </div>
       <div class="col-md-9 col-12">
         <p>The system is described in our paper:</p>
-        <blockquote>
-          <p class="mb-0">
-            <a href="https://ondrej.cifka.com" target="_blank">O. Cífka</a>, <a href="https://perso.telecom-paristech.fr/simsekli/" target="_blank">U. Şimşekli</a> and <a href="https://perso.telecom-paristech.fr/grichard/" target="_blank">G. Richard</a>, "Groove2Groove: One-Shot Music Style Transfer with Supervision from Synthetic Data," in <em>IEEE/ACM Transactions on Audio, Speech, and Language Processing</em>, doi: <a href="https://doi.org/10.1109/TASLP.2020.3019642" target="_blank">10.1109/TASLP.2020.3019642</a>.
-          </p>
-        </blockquote>
+        <div class="d-lg-flex">
+          <div>
+            <blockquote>
+              <p class="mb-0">
+                <a href="https://ondrej.cifka.com" target="_blank">O. Cífka</a>, <a href="https://perso.telecom-paristech.fr/simsekli/" target="_blank">U. Şimşekli</a> and <a href="https://perso.telecom-paristech.fr/grichard/" target="_blank">G. Richard</a>, "Groove2Groove: One-Shot Music Style Transfer with Supervision from Synthetic Data," in <em>IEEE/ACM Transactions on Audio, Speech, and Language Processing</em>, doi: <a href="https://doi.org/10.1109/TASLP.2020.3019642" target="_blank">10.1109/TASLP.2020.3019642</a>.
+              </p>
+            </blockquote>
+          </div>
+          <div class="d-none d-lg-block">
+            <div data-badge-popover="left" data-badge-type="donut" data-doi="10.1109/TASLP.2020.3019642" data-hide-no-mentions="true" class="altmetric-embed"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -133,3 +143,5 @@ for further details). 5/6 of the chord charts are in major keys, the other 1/6 i
     </div>
   </div>
 </main>
+
+<script type='text/javascript' src='https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js'></script>
