@@ -77,8 +77,7 @@ export function normalizeTempo(ns: INoteSequence, targetTempo?: number) {
     targetTempo = tempos[0].qpm;
   }
 
-  // Get all events and sort them in reverse (so that we pop the earlier ones first).
-  // Ignore tempos because we will eventually remove them.
+  // Get all events. Ignore tempos because we will eventually remove them.
   const events = [];
   for (const eventCollection of [ns.timeSignatures, ns.keySignatures, ns.pitchBends,
                                  ns.controlChanges, ns.textAnnotations, ns.sectionAnnotations]) {
@@ -86,6 +85,10 @@ export function normalizeTempo(ns: INoteSequence, targetTempo?: number) {
       events.push(event);
     }
   }
+  // Add an artificial event for totalTime.
+  const totalTimeEvent = {time: ns.totalTime};
+  events.push(totalTimeEvent);
+  // Sort the events in reverse (so that we pop the earlier ones first).
   events.sort((a, b) => b.time - a.time);
 
   // Do the same for note-ons and note-offs.
@@ -128,6 +131,7 @@ export function normalizeTempo(ns: INoteSequence, targetTempo?: number) {
     }
   }
 
+  ns.totalTime = totalTimeEvent.time;
   ns.tempos = [NoteSequence.Tempo.create({time: 0, qpm: targetTempo})];
   return ns;
 }
