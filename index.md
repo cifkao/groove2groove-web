@@ -45,7 +45,7 @@ for the first file in the style of the second one.
     <div class="row pt-4 pb-2">
       <div class="col-md-3 col-12 mb-3">
         <h3 id="Paper" class="anchor"><span class="mr-2">Paper</span><span class="badges">
-          <a href="{{ "/data/paper.pdf" | relative_url }}" class="badge"><span class="oi oi-document" aria-hidden="true"></span>PDF</a>
+          <a href="https://hal.archives-ouvertes.fr/hal-02923548/document" class="badge"><span class="oi oi-document" aria-hidden="true"></span>PDF</a>
           <a href="https://doi.org/10.1109/TASLP.2020.3019642" target="blank" class="badge"><span class="oi oi-double-quote-serif-right" aria-hidden="true"></span>DOI</a>
         </span></h3>
         <div class="d-none d-md-block d-lg-none">
