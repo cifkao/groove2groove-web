@@ -205,8 +205,23 @@ table.preset-table{
   }
 }
 
-#presetModal table.table thead th {
-  border-top: none;
+
+#presetModal {
+  overflow-x: auto;
+
+  .modal-content {
+    @include media-breakpoint-down(xs) {
+      width: auto;  // override width: 100%
+    }
+  }
+
+  table.preset-table {
+    min-width: 350px;
+
+    thead th {
+      border-top: none;
+    }
+  }
 }
 
 .modal-meme {
@@ -247,6 +262,44 @@ $instrument-colors: $blue, $red, $teal, $indigo, $yellow, $pink, $cyan, $orange,
 
 .tempo {
   max-width: 6em;
+}
+
+.generate-button {
+  @include media-breakpoint-down(xs) {
+    display: block;
+    width: 100%;
+  }
+
+  @include media-breakpoint-up(sm) {
+    @include border-left-radius(0);
+    margin-left: -$input-border-width;
+  }
+}
+
+.sampling-group {
+  @include media-breakpoint-down(xs) {
+    max-width: 75%;
+  }
+
+  .input-group-text {
+    overflow: hidden;
+
+    label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+#samplingTemperature {
+  @include border-right-radius($input-border-radius);
+  margin-left: -$input-border-width;
+
+  @include media-breakpoint-up(sm) {
+    max-width: 4.5em;
+    @include border-right-radius(0);
+    margin-right: -$input-border-width;
+  }
 }
 
 label[data-instrument] {

@@ -182,7 +182,7 @@ after: |
            Try playing around with the temperature to make the result sound more or less &lsquo;random&rsquo;, but do not get burnt (safe values are around 0.6)!</p>
       </div>
       <form class="form-inline">
-        <div class="input-group mb-1 mr-2">
+        <div class="input-group mb-1 mr-sm-2">
           <div class="input-group-prepend">
             <div class="input-group-text">
               Model
@@ -194,20 +194,18 @@ after: |
             <option value="v01_drums_vel_perf">with velocity, &Delta;-encoding</option>
           </select>
         </div>
-        <div class="input-group mb-1 mr-2">
-          <div class="input-group-prepend">
-            <button type="button" class="btn btn-primary generate-button" disabled data-enable-in-advanced>
-              <span data-show-in-advanced><span class="oi oi-cog" title="Generate" aria-hidden="true"></span> Generate</span>
-              <span data-hide-in-advanced><span class="oi oi-ban" title="Enable advanced mode to generate" aria-hidden="true"></span></span>
-            </button>
-          </div>
-          <div class="input-group-prepend">
-            <div class="input-group-text">
+        <div class="input-group mb-1">
+          <div class="sampling-group input-group-prepend mb-1 mb-sm-0">
+            <span class="input-group-text">
               <input type="checkbox" id="samplingCheckbox" name="samplingCheckbox" checked disabled data-enable-in-advanced>
               <label for="samplingCheckbox" class="ml-1 mb-0">Sample with temperature:</label>
-            </div>
+            </span>
           </div>
-          <input type="number" class="form-control" id="samplingTemperature" name="samplingTemperature" value="0.6" min="0.0" step="0.1" max="1.5" style="max-width: 4.5em" disabled data-enable-in-advanced>
+          <input type="number" class="form-control" id="samplingTemperature" name="samplingTemperature" value="0.6" min="0.0" step="0.1" max="1.5" disabled data-enable-in-advanced>
+          <button type="button" class="btn btn-primary generate-button" disabled data-enable-in-advanced>
+            <span data-show-in-advanced><span class="oi oi-cog" title="Generate" aria-hidden="true"></span> Generate</span>
+            <span data-hide-in-advanced title="Enable advanced mode to generate"><span class="oi oi-ban" aria-hidden="true"></span> Generate</span>
+          </button>
         </div>
       </form>
       <div class="card visualizer-card mt-2 after-output-loaded">
