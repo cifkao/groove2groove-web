@@ -107,6 +107,14 @@ $(data['content'].section).hide();
 $('#pageLoadingIndicator').hide();
 $('main .content').fadeIn('fast');
 
+// Load preset if requested by query parameter
+if (typeof URLSearchParams !== 'undefined') {
+  const presetUrl = new URLSearchParams(window.location.search).get('preset');
+  if (presetUrl != null) {
+    loadPresetFromUrl(presetUrl);
+  }
+}
+
 $('#presetsButton').click(function() {
   $('#presetModal').modal('show');
 });
@@ -271,6 +279,29 @@ $('.generate-button').on('click', function() {
       setSectionEnabled(remixSection, true);
       showWaiting(remixSection, false);
     });
+});
+
+$('#sharePresetButton').on('click', () => {
+  const filename = data['output'].sequence.filename.replace(/\.mid$/, '.json');
+  const file = new File([exportPreset()], filename);
+  $('#sharePresetModal .preset-filename').text(filename);
+  $('#presetDownloadButton').off();
+  $('#presetDownloadButton').on('click', () => {
+    saveAs(file);
+  });
+  $('#uploadedPresetUrl').val('');
+  $('#presetShareUrl').val('');
+  $('#sharePresetModal').modal('show');
+});
+
+$('#uploadedPresetUrl').on('input change', ({currentTarget}) => {
+  const url = (currentTarget as HTMLInputElement).value;
+  const paramString = new URLSearchParams({'preset': url}).toString();
+  $('#presetShareUrl').val('https://groove2groove.telecom-paris.fr/demo.html?' + paramString);
+});
+
+$('#presetShareUrl').on('focus', ({currentTarget}) => {
+  (currentTarget as HTMLInputElement).select();
 });
 
 $('#savePreset').on('click', function() {
@@ -443,7 +474,7 @@ function updateSequence(seqId: SequenceId, seq: INoteSequence) {
 }
 
 function setSectionEnabled(section: JQuery, enabled: boolean) {
-  setEnabled(section.find('input, button, select'), enabled);
+  setEnabled(section.find('input, button, select').not('#sharePresetButton'), enabled);
 }
 
 function handlePlaybackStop(seqId: SequenceId) {
@@ -458,7 +489,7 @@ function handlePlaybackStop(seqId: SequenceId) {
   setEnabled(section.find('.seek-slider'), false);
 }
 
-export function stopAllPlayers() {
+function stopAllPlayers() {
   for (const seqId of SEQ_IDS) {
     if (data[seqId].player && data[seqId].player.isPlaying()) {
       data[seqId].player.stop();
@@ -502,6 +533,7 @@ export function exportPreset() {
     }
   }
   return JSON.stringify({
+    version: 1,
     data: dataCopy,
     controls: $('input, select').serializeArray()
   });
