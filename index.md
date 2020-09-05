@@ -31,14 +31,24 @@ title: Groove2Groove – One-shot music style transfer
 </header>
 
 <main>
-  <div class="container">
-    <div class="row pt-2 pb-2">
-      <div class="lead col-12" markdown="1">
+  <div class="container mb-4 mt-md-1">
+    <div class="row pb-4">
+      <div class="col-12 col-md-7 col-lg-8 lead">
+        <p class="mb-md-0" markdown="1">
 **Groove2Groove** (Grv2Grv) is an AI system for music accompaniment style transfer.
 Given two MIDI files – a **content input** and a **style input** – it generates a new accompaniment
 for the first file in the style of the second one.
-</div>
+For example, we can use it to transfer the style of *Fantastic Voyage* by Lakeside onto
+*Lithium* by Nirvana:
+</p>
+      </div>
+      <div class="col-12 col-md-5 col-lg-4">
+        <div class="embed-container" style="min-height: 100%;">
+          <iframe src="https://www.youtube.com/embed/videoseries?start=3&list=PLPdw6Kin7U86tcz-vlMmKqQmq4yL325aH&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
     </div>
+    <hr>
   </div>
 
   <div class="container">
