@@ -90,7 +90,7 @@ For example, we can use it to transfer the style of *Fantastic Voyage* by Lakesi
       <div class="col-md-9 col-12" markdown="1">
 We provide the following resources to supplement the paper:
   - [Source code](https://github.com/cifkao/groove2groove){:target="_blank"} of the system and the evaluation metrics
-  - [Configuration files](https://github.com/cifkao/groove2groove){:target="_blank"} with hyperparameter settings
+  - [Configuration files](https://github.com/cifkao/groove2groove/tree/master/experiments){:target="_blank"} with hyperparameter settings
   - [Style interpolation (blending) examples]({{ "/style-interpolation.html" | relative_url }})
   - [Dataset](#Dataset) used for training and evaluation
 </div>
