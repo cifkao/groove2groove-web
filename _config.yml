@@ -46,7 +46,6 @@ include:
   - .htaccess
 
 keep_files:
-  - .htaccess
   - .git
   - .svn
   - data
