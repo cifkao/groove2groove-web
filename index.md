@@ -68,7 +68,7 @@ For example, we can use it to transfer the style of *Fantastic Voyage* by Lakesi
           <div>
             <blockquote>
               <p class="mb-0">
-                <a href="https://ondrej.cifka.com" target="_blank">O. Cífka</a>, <a href="https://perso.telecom-paristech.fr/simsekli/" target="_blank">U. Şimşekli</a> and <a href="https://perso.telecom-paristech.fr/grichard/" target="_blank">G. Richard</a>, "Groove2Groove: One-Shot Music Style Transfer with Supervision from Synthetic Data," in <em>IEEE/ACM Transactions on Audio, Speech, and Language Processing</em>, doi: <a href="https://doi.org/10.1109/TASLP.2020.3019642" target="_blank">10.1109/TASLP.2020.3019642</a>.
+                <a href="https://ondrej.cifka.com" target="_blank">Ondřej Cífka</a>, <a href="https://perso.telecom-paristech.fr/simsekli/" target="_blank">Umut Şimşekli</a> and <a href="https://perso.telecom-paristech.fr/grichard/" target="_blank">Gaël Richard</a>. "Groove2Groove: One-Shot Music Style Transfer with Supervision from Synthetic Data." <em>IEEE/ACM Transactions on Audio, Speech, and Language Processing</em>, 28:2638–2650, 2020. doi: <a href="https://doi.org/10.1109/TASLP.2020.3019642" target="_blank">10.1109/TASLP.2020.3019642</a>.
               </p>
             </blockquote>
           </div>
