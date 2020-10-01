@@ -362,9 +362,35 @@ function initSequence(section: JQuery, seq: INoteSequence, visualizerConfig?: mm
 
 function initVisualizer(seqId: SequenceId) {
   const section = $(data[seqId].section);
-  const svg = section.find('svg')[0];
+  const container = section.find('.visualizer-container');
+  const svg = container.find('svg')[0];
+  const beatBar = container.find('.beat-bar')[0];
+
   data[seqId].visualizer = new mm.PianoRollSVGVisualizer(data[seqId].sequence, svg, data[seqId].visualizerConfig);
-  section.find('.visualizer-container').scrollLeft(0);
+
+  beatBar.innerHTML = '';
+  const beatTimes = data[seqId].beats;
+  if (beatTimes != null) {
+    const pixelsPerSecond = data[seqId].visualizerConfig.pixelsPerTimeStep;
+    const startBeat = parseInt(section.find('.start-time').val() as string) || 0;
+    const endBeat = parseInt(section.find('.end-time').val() as string) || beatTimes.length - 1;
+    let lastI = startBeat;
+    for (let i = startBeat + 1; i <= endBeat; i++) {
+      const beatElement = document.createElement('span');
+      const width = pixelsPerSecond * (beatTimes[i] - beatTimes[lastI]);
+      beatElement.style.flexBasis = String(width) + 'px';
+      beatElement.style.maxWidth = String(width) + 'px';
+      beatElement.classList.add('beat');
+      if ((i - 1 - startBeat) % 4 == 0) {
+        beatElement.classList.add('downbeat');
+        beatElement.innerText = String(lastI);
+      }
+      beatBar.appendChild(beatElement);
+      lastI = i;
+    }
+  }
+
+  container.scrollLeft(0);
 }
 
 function initTrimControls(section: JQuery) {

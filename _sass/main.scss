@@ -273,6 +273,25 @@ $instrument-colors: $blue, $red, $teal, $indigo, $yellow, $pink, $cyan, $orange,
 
 .visualizer-container {
   overflow-x: auto;
+
+  .beat-bar {
+    display: flex;
+    font-size: 70%;
+    word-wrap: normal;
+
+    .beat {
+      display: inline-block;
+      flex: 0 0;
+      box-sizing: border-box;
+      background: #eee;
+      border-left: 1px solid white;
+    }
+    .beat.downbeat {
+      border-left: 2px solid #ccc;
+      padding-left: 2px;
+      z-index: 1;
+    }
+  }
 }
 
 .visualizer-card {
