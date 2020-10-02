@@ -312,7 +312,7 @@ function getSeqId(section: JQuery) {
   return section.data('sequence-id') as SequenceId;
 }
 
-function initSequence(section: JQuery, seq: INoteSequence, visualizerConfig?: mm.VisualizerConfig, staticMode?: boolean) {
+function initSequence(section: JQuery, seq: INoteSequence, visualizerConfig?: mm.VisualizerConfig, staticMode = false) {
   const seqId = getSeqId(section);
   data[seqId].trimmedSequence = seq;
   data[seqId].sequence = seq;
@@ -340,7 +340,7 @@ function initSequence(section: JQuery, seq: INoteSequence, visualizerConfig?: mm
     visualizerConfig = VISUALIZER_CONFIG;
   }
   data[seqId].visualizerConfig = visualizerConfig;
-  initVisualizer(seqId);
+  initVisualizer(seqId, true);
 
   if (seqId == 'remix') {
     const outputCheckboxes = addInstrumentCheckboxes(
@@ -360,7 +360,7 @@ function initSequence(section: JQuery, seq: INoteSequence, visualizerConfig?: mm
   }
 }
 
-function initVisualizer(seqId: SequenceId) {
+function initVisualizer(seqId: SequenceId, reset = false) {
   const section = $(data[seqId].section);
   const container = section.find('.visualizer-container');
   const svg = container.find('svg')[0];
@@ -372,8 +372,8 @@ function initVisualizer(seqId: SequenceId) {
   const beatTimes = data[seqId].beats;
   if (beatTimes != null) {
     const pixelsPerSecond = data[seqId].visualizerConfig.pixelsPerTimeStep;
-    const startBeat = parseInt(section.find('.start-time').val() as string) || 0;
-    const endBeat = parseInt(section.find('.end-time').val() as string) || beatTimes.length - 1;
+    const startBeat = reset ? 0 : parseInt(section.find('.start-time').val() as string);
+    const endBeat = reset ? beatTimes.length - 1 : parseInt(section.find('.end-time').val() as string);
     let lastI = startBeat;
     for (let i = startBeat + 1; i <= endBeat; i++) {
       const beatElement = document.createElement('span');
