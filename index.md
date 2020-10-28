@@ -90,8 +90,9 @@ Check out our [interactive demo]({{ "/demo.html" | relative_url }}) for more exa
       </div>
       <div class="col-md-9 col-12" markdown="1">
 We provide the following resources to supplement the paper:
-  - [Source code](https://github.com/cifkao/groove2groove){:target="_blank"} of the system and the evaluation metrics
-  - [Configuration files](https://github.com/cifkao/groove2groove/tree/master/experiments){:target="_blank"} with hyperparameter settings
+  - [Interactive demo]({{ "/demo.html" | relative_url }})
+  - [Source code](https://github.com/cifkao/groove2groove) of the system and the evaluation metrics
+  - [Configuration files](https://github.com/cifkao/groove2groove/tree/master/experiments) with hyperparameter settings
   - [Style interpolation (blending) examples]({{ "/style-interpolation.html" | relative_url }})
   - [Dataset](#Dataset) used for training and evaluation
 </div>
