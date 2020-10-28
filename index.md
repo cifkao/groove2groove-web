@@ -39,7 +39,8 @@ title: Groove2Groove – One-shot music style transfer
 Given two MIDI files – a **content input** and a **style input** – it generates a new accompaniment
 for the first file in the style of the second one.
 For example, we can use it to transfer the style of *Fantastic Voyage* by Lakeside onto
-*Lithium* by Nirvana:
+*Lithium* by Nirvana, as in this video.
+Check out our [interactive demo]({{ "/demo.html" | relative_url }}) for more examples.
 </p>
       </div>
       <div class="col-12 col-md-5 col-lg-4">
