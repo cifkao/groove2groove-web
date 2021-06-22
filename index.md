@@ -117,7 +117,7 @@ Each chord chart is rendered in at least two different styles, providing pairs o
 The dataset is available [from Zenodo](http://doi.org/10.5281/zenodo.3958000){:target="_blank"}.
 If you use the data for your research, please <a href="#Paper">cite the paper</a>.
 
-The code used for automating the accompaniment generation is available [on GitHub](https://github.com/cifkao/pybiab/).
+The code used for automating the accompaniment generation is available [on GitHub](https://github.com/cifkao/pybiab/){:target="_blank"}.
 
 #### MIDI files
 The `midi` directory contains one subdirectory for each part of the dataset:
