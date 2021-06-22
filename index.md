@@ -93,6 +93,7 @@ We provide the following resources to supplement the paper:
   - [Interactive demo]({{ "/demo.html" | relative_url }})
   - [Source code](https://github.com/cifkao/groove2groove) of the system and the evaluation metrics
   - [Configuration files](https://github.com/cifkao/groove2groove/tree/master/experiments) with hyperparameter settings
+  - [Trained model checkpoints]({{ "/data/checkpoints/" | relative_url }})
   - [Style interpolation (blending) examples]({{ "/style-interpolation.html" | relative_url }})
   - [Dataset](#Dataset) used for training and evaluation
 </div>
