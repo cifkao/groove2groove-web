@@ -40,7 +40,7 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
-    "@magenta/music": "^1.19.0",
+    "@magenta/music": "^1.23.1",
     "@tonejs/midi": "^2.0.23",
     "bootstrap": "^4.4.1",
     "bootstrap4-toggle": "^3.6.1",
